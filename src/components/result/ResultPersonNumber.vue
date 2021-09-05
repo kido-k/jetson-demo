@@ -37,7 +37,7 @@ export default {
       const ref = this.$firebase.database().ref(`results/current`)
       ref.on('value', (snapshot) => {
         if (!snapshot?.val()) return
-        this.personNumber = Number(snapshot.val().person)
+        this.personNumber = Number(snapshot.val().person || 0)
       })
     },
   },
