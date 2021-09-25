@@ -93,3 +93,5 @@ sw.*
 # Firebase
 .firebase*
 firebase*
+
+src/assets/sample

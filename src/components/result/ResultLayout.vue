@@ -1,44 +1,47 @@
 <template>
   <div class="result">
     <p class="result__title ma-4">Monitor</p>
-    <result-button-group :showGraph="showGraph" @setShowGraph="setShowGraph" />
-    <result-chart v-if="showGraph" :results="results" />
-    <result-person-number v-if="!showGraph" :results="results" />
+    <result-button-group :type="type" @setType="setType" />
+    <result-person-number v-if="type === 'number'" :currents="currents" />
+    <result-chart v-if="type === 'graph'" :currents="currents" />
+    <result-mapping v-if="type === 'mapping'" />
   </div>
 </template>
 
 <script>
-import ResultChart from './ResultChart.vue'
 import ResultButtonGroup from './ResultButtonGroup.vue'
 import ResultPersonNumber from './ResultPersonNumber.vue'
+import ResultChart from './ResultChart.vue'
+import ResultMapping from './ResultMapping.vue'
 
 export default {
   components: {
-    ResultChart,
     ResultButtonGroup,
     ResultPersonNumber,
+    ResultChart,
+    ResultMapping,
   },
   props: {},
   data() {
     return {
-      results: null,
-      showGraph: false,
+      type: 'number',
+      currents: null,
     }
   },
   computed: {},
   mounted() {
-    this.setResultItems()
+    this.setCurrentItems()
   },
   methods: {
-    setResultItems() {
+    setCurrentItems() {
       const ref = this.$firebase.database().ref(`results/current`)
       ref.on('value', (snapshot) => {
         if (!snapshot || !snapshot.val()) return
-        this.results = snapshot.val()
+        this.currents = snapshot.val()
       })
     },
-    setShowGraph(bool) {
-      this.showGraph = bool
+    setType(type) {
+      this.type = type
     },
   },
 }

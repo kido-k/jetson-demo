@@ -21,7 +21,7 @@ export default {
     Chart,
   },
   props: {
-    results: {
+    currents: {
       type: Object,
       default: () => ({}),
     },
@@ -60,7 +60,7 @@ export default {
   },
   computed: {},
   watch: {
-    results: {
+    currents: {
       handler() {
         this.setChartData()
       },
@@ -72,10 +72,10 @@ export default {
   },
   methods: {
     setChartData() {
-      this.chartLabels = Object.keys(this.results) || []
+      this.chartLabels = Object.keys(this.currents) || []
       this.chartData = []
-      Object.keys(this.results).forEach((key) => {
-        this.chartData.push(this.results[key])
+      Object.keys(this.currents).forEach((key) => {
+        this.chartData.push(this.currents[key])
       })
       this.chartColors = this.chartBaseColor.slice(0, this.chartLabels.length)
     },

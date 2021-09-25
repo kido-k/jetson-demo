@@ -4,20 +4,36 @@
       <v-btn
         fab
         depressed
-        :color="!showGraph ? 'indigo' : 'gray'"
-        @click="changeShowGraph(false)"
+        :color="type === 'number' ? 'indigo' : 'gray'"
+        @click="changeType('number')"
       >
-        <v-icon :color="!showGraph ? 'white' : 'black'">mdi-account</v-icon>
+        <v-icon :color="type === 'number' ? 'white' : 'black'">
+          mdi-account
+        </v-icon>
       </v-btn>
     </div>
     <div>
       <v-btn
         fab
         depressed
-        :color="showGraph ? 'indigo' : 'gray'"
-        @click="changeShowGraph(true)"
+        :color="type === 'graph' ? 'indigo' : 'gray'"
+        @click="changeType('graph')"
       >
-        <v-icon :color="showGraph ? 'white' : 'black'">mdi-chart-bar</v-icon>
+        <v-icon :color="type === 'graph' ? 'white' : 'black'">
+          mdi-chart-bar
+        </v-icon>
+      </v-btn>
+    </div>
+    <div>
+      <v-btn
+        fab
+        depressed
+        :color="type === 'mapping' ? 'indigo' : 'gray'"
+        @click="changeType('mapping')"
+      >
+        <v-icon :color="type === 'mapping' ? 'white' : 'black'">
+          mdi-map-marker-multiple
+        </v-icon>
       </v-btn>
     </div>
   </div>
@@ -26,9 +42,9 @@
 <script>
 export default {
   props: {
-    showGraph: {
-      type: Boolean,
-      default: false,
+    type: {
+      type: String,
+      default: 'number',
     },
   },
   data() {
@@ -36,8 +52,8 @@ export default {
   },
   computed: {},
   methods: {
-    changeShowGraph(showGraph) {
-      this.$emit('setShowGraph', showGraph)
+    changeType(type) {
+      this.$emit('setType', type)
     },
   },
 }

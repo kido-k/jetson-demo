@@ -10,7 +10,7 @@
 <script>
 export default {
   props: {
-    results: {
+    currents: {
       type: Object,
       default: () => ({}),
     },
@@ -22,7 +22,7 @@ export default {
   },
   computed: {},
   watch: {
-    results: {
+    currents: {
       handler() {
         this.setPersonNumber()
       },
@@ -34,11 +34,8 @@ export default {
   },
   methods: {
     setPersonNumber() {
-      const ref = this.$firebase.database().ref(`results/current`)
-      ref.on('value', (snapshot) => {
-        if (!snapshot?.val()) return
-        this.personNumber = Number(snapshot.val().person || 0)
-      })
+      if (!this.currents) return
+      this.personNumber = this.currents.person || 0
     },
   },
 }
