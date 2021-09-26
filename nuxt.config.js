@@ -28,7 +28,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/firebase'],
+  plugins: [{ src: '@/plugins/firebase', mode: 'client' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -53,7 +53,20 @@ export default {
   axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
-
+  build: {
+    transpile: ['three'],
+    babel: {
+      babelrc: false,
+      compact: false,
+    },
+    extend(config, ctx) {
+      if (config.module) {
+        config.module.rules.push({
+          test: /\.(vert|frag)$/i,
+          use: ['raw-loader'],
+        })
+      }
+    },
+  },
   env,
 }
