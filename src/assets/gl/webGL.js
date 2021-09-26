@@ -1,4 +1,4 @@
-import three from './common'
+import common from './common'
 
 export default class webGL {
   constructor(props) {
@@ -7,13 +7,13 @@ export default class webGL {
   }
 
   init() {
-    three.init(this.props.$canvas)
+    common.init(this.props)
     window.addEventListener('resize', this.resize.bind(this))
     this.loop()
   }
 
   resize() {
-    three.resize()
+    common.resize()
   }
 
   loop() {
@@ -22,6 +22,7 @@ export default class webGL {
   }
 
   render() {
-    three.render()
+    common.update()
+    common.render()
   }
 }
