@@ -1,14 +1,17 @@
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+// import EventBus from '~/utils/event-bus'
 
 class Common {
   constructor() {
     this.scene = null
     this.camera = null
     this.renderer = null
+    this.controls = null
 
     this.size = {
-      windowW: null,
-      windowH: null,
+      width: null,
+      height: null,
     }
 
     this.clock = null
@@ -21,12 +24,14 @@ class Common {
 
   init($canvas) {
     this.setSize()
+    // EventBus.$on('MOUSEMOVE', this.onMouseMove.bind(this))
 
     this.scene = new THREE.Scene()
     this.camera = new THREE.PerspectiveCamera(
       45,
-      this.size.windowW / this.size.windowH,
-      0.1
+      this.size.width / this.size.height,
+      1,
+      10000
     )
     this.camera.position.set(0, 10, -10)
     this.camera.lookAt(this.scene.position)
@@ -38,15 +43,17 @@ class Common {
     this.renderer.setPixelRatio(window.devicePixelRatio)
 
     this.renderer.setClearColor(0xeaf2f5)
-    this.renderer.setSize(this.size.windowW, this.size.windowH)
+    this.renderer.setSize(this.size.width, this.size.height)
 
     this.scene = new THREE.Scene()
 
     this.camera = new THREE.PerspectiveCamera(
       45,
-      this.size.windowW / this.size.windowH
+      this.size.width / this.size.height
     )
     this.camera.position.set(0, 0, 1000)
+
+    this.controls = new OrbitControls(this.camera, $canvas)
 
     const geometry = new THREE.BoxGeometry(400, 400, 400)
     const material = new THREE.MeshNormalMaterial()
@@ -59,16 +66,16 @@ class Common {
 
   setSize() {
     this.size = {
-      windowW: window.innerWidth,
-      windowH: window.innerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
     }
   }
 
   resize() {
     this.setSize()
-    this.camera.aspect = this.size.windowW / this.size.windowH
+    this.camera.aspect = this.size.width / this.size.height
     this.camera.updateProjectionMatrix()
-    this.renderer.setSize(this.size.windowW, this.size.windowH)
+    this.renderer.setSize(this.size.width, this.size.height)
   }
 
   render() {
