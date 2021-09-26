@@ -27,8 +27,12 @@
     "core-js": "^3.9.1",
     "firebase": "^8.6.8",
     "firebase-tools": "^9.14.0",
+    "glfx": "0.0.4",
+    "konva": "^8.1.3",
     "nuxt": "^2.15.3",
-    "vue-chartjs": "^3.4.2"
+    "three": "^0.132.2",
+    "vue-chartjs": "^3.4.2",
+    "vue-konva": "^2.1.7"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",
@@ -38,7 +42,7 @@
     "@vue/test-utils": "^1.1.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^27.2.2",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-nuxt": "^2.0.0",
@@ -48,6 +52,7 @@
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
+    "raw-loader": "^4.0.2",
     "stylelint": "^13.12.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^21.0.0",
