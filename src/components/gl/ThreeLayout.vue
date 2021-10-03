@@ -48,6 +48,7 @@ export default {
   destroyed() {},
   methods: {
     test() {
+      eventBus.$emit('setCoordinate', this.positions[this.count])
       this.interval = setInterval(() => {
         if (this.positions[this.count]) {
           eventBus.$emit('setCoordinate', this.positions[this.count])

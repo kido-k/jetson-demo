@@ -1,5 +1,10 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+// import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader'
+// import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+// import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+
 import EventBus from '~/utils/event-bus'
 
 const fps = 60
@@ -12,7 +17,7 @@ const cameraSetting = {
   position: { x: 0, y: 500, z: 1000 },
 }
 
-const lightSetting = { position: { x: 0, y: 500, z: 1000 } }
+const lightSetting = { position: { x: 0, y: 300, z: 400 } }
 
 class Common {
   constructor() {
@@ -21,6 +26,11 @@ class Common {
     this.light = null
     this.renderer = null
     this.controls = null
+    // this.mtlLoader = null
+    // this.objLoader = null
+    // this.colladaLoader = null
+    this.gtfLoader = null
+    this.mixer = null
 
     this.size = {
       width: null,
@@ -35,6 +45,7 @@ class Common {
     }
 
     this.diffs = []
+    this.rotation = null
   }
 
   init({ $canvas, base }) {
@@ -61,7 +72,7 @@ class Common {
     this.controls = new OrbitControls(this.camera, $canvas)
 
     // ライトの設定
-    const light = new THREE.DirectionalLight(0xffffff, 1)
+    const light = new THREE.DirectionalLight(0xffffff, 2)
     light.position.set(
       lightSetting.position.x,
       lightSetting.position.y,
@@ -134,41 +145,68 @@ class Common {
   }
 
   addSphere(position, name) {
-    // 球のパーツ
-    const sphereGeometry = new THREE.SphereGeometry(10)
-    const sphereMaterial = new THREE.MeshPhongMaterial()
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
-    sphere.name = name
-    sphere.position.set(position.x, position.y, position.z)
-    this.scene.add(sphere)
+    // // 球のパーツ
+    // const sphereGeometry = new THREE.SphereGeometry(10)
+    // const sphereMaterial = new THREE.MeshPhongMaterial()
+    // const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+    // sphere.name = name
+    // sphere.position.set(position.x, position.y, position.z)
+    // this.scene.add(sphere)
+
+    this.gltfLoader = new GLTFLoader()
+    this.gltfLoader.load('/models/robot_animation.glb', (data) => {
+      const gltf = data
+      const model = gltf.scene
+      const animations = gltf.animations
+      if (animations && animations.length) {
+        this.mixer = new THREE.AnimationMixer(model)
+        animations.forEach((animation) => {
+          this.mixer.clipAction(animation).play()
+        })
+      }
+      model.name = name
+      model.scale.set(10, 10, 10)
+      model.rotation.y = Math.PI
+      model.position.set(position.x, position.y, position.z)
+      this.scene.add(model)
+    })
   }
 
   moveSphere(position, name) {
-    console.log(position)
     const sphere = this.scene.getObjectByName(name)
+    const diffX = position.x - sphere.position.x
+    const diffZ = position.z - sphere.position.z
     const diff = {
-      x: (position.x - sphere.position.x) / fps,
+      x: diffX / fps,
       y: 0,
-      z: (position.z - sphere.position.z) / fps,
+      z: diffZ / fps,
     }
     this.diffs.push({ name, diff })
-    // sphere.position.set(position.x, position.y, position.z)
+    this.rotation = calcAngleDegrees(diffX, diffZ)
   }
 
   update() {
-    this.diffs.forEach((diff) => {
-      const sphere = this.scene.getObjectByName(diff.name)
-      sphere.position.set(
-        sphere.position.x + diff.diff.x,
-        sphere.position.y,
-        sphere.position.z + diff.diff.z
+    if (this.mixer) {
+      this.mixer.update(this.clock.getDelta())
+    }
+    this.diffs.forEach((diff, index) => {
+      const model = this.scene.getObjectByName(diff.name)
+      model.position.set(
+        model.position.x + diff.diff.x,
+        model.position.y,
+        model.position.z + diff.diff.z
       )
+      model.rotation.y = this.rotation
     })
   }
 
   removeSphere(name) {
     this.scene.remove(name)
   }
+}
+
+function calcAngleDegrees(x, y) {
+  return (Math.atan2(y, x) * 180) / Math.PI
 }
 
 export default new Common()
