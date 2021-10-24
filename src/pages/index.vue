@@ -1,15 +1,15 @@
 <template>
   <section>
-    <result-layout />
+    <three-layout />
   </section>
 </template>
 
 <script>
-import ResultLayout from '~/components/result/ResultLayout.vue'
+import ThreeLayout from '~/components/gl/ThreeLayout.vue'
 
 export default {
   components: {
-    ResultLayout,
+    ThreeLayout,
   },
 }
 </script>

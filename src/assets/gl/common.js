@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader'
+// import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader'
 // import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 // import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -18,7 +18,7 @@ const cameraSetting = {
 }
 
 const lightSetting = { position: { x: 300, y: 300, z: 400 } }
-const lightSetting2 = { position: { x: -300, y: 300, z: 400 } }
+// const lightSetting2 = { position: { x: -300, y: 300, z: 400 } }
 
 class Common {
   constructor() {
@@ -73,7 +73,7 @@ class Common {
     this.controls = new OrbitControls(this.camera, $canvas)
 
     // ライトの設定
-    const light = new THREE.DirectionalLight(0xffffff, 1)
+    const light = new THREE.AmbientLight(0xffffff, 1)
     light.position.set(
       lightSetting.position.x,
       lightSetting.position.y,
@@ -81,13 +81,13 @@ class Common {
     )
     this.scene.add(light)
 
-    const light2 = new THREE.DirectionalLight(0xffffff, 1)
-    light.position.set(
-      lightSetting2.position.x,
-      lightSetting2.position.y,
-      lightSetting2.position.z
-    )
-    this.scene.add(light2)
+    // const light2 = new THREE.DirectionalLight(0xffffff, 1)
+    // light.position.set(
+    //   lightSetting2.position.x,
+    //   lightSetting2.position.y,
+    //   lightSetting2.position.z
+    // )
+    // this.scene.add(light2)
 
     // レンダラーの設定
     this.renderer = new THREE.WebGLRenderer({
@@ -98,14 +98,14 @@ class Common {
     this.renderer.setClearColor(0xeaf2f5)
     this.renderer.setSize(this.size.width, this.size.height)
 
-    this.colladaLoader = new ColladaLoader()
-    this.colladaLoader.load('/models/eventos-booth.dae', (collada) => {
-      const model = collada.scene
-      model.scale.set(50, 50, 50)
-      model.position.set(0, 10, 0)
-      model.rotation.z = Math.PI / 2
-      this.scene.add(model)
-    })
+    // this.colladaLoader = new ColladaLoader()
+    // this.colladaLoader.load('/models/eventos-booth.dae', (collada) => {
+    //   const model = collada.scene
+    //   model.scale.set(50, 50, 50)
+    //   model.position.set(0, 10, 0)
+    //   model.rotation.z = Math.PI / 2
+    //   this.scene.add(model)
+    // })
 
     // 土台のパーツ
     const baseGeometry = new THREE.BoxGeometry(

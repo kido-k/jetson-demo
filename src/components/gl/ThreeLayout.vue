@@ -16,7 +16,7 @@ export default {
       interval: null,
       base: {
         size: { x: 10000, y: 10, z: 10000 },
-        color: 0x8a8a8a,
+        color: 0xffffff,
       },
       positions: [
         [{ x: 0, y: 10, z: 300 }],
