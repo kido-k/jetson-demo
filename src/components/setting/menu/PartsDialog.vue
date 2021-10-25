@@ -44,6 +44,22 @@
         </v-layout>
         <v-layout align-center justify-center class="pa-4">
           <v-flex xs3>
+            <p class="ma-0 mr-4">x:</p>
+          </v-flex>
+          <v-flex xs9>
+            <v-text-field v-model="x" hide-details="auto" type="number" />
+          </v-flex>
+        </v-layout>
+        <v-layout align-center justify-center class="pa-4">
+          <v-flex xs3>
+            <p class="ma-0 mr-4">z:</p>
+          </v-flex>
+          <v-flex xs9>
+            <v-text-field v-model="z" hide-details="auto" type="number" />
+          </v-flex>
+        </v-layout>
+        <v-layout align-center justify-center class="pa-4">
+          <v-flex xs3>
             <p class="ma-0 mr-4">color:</p>
           </v-flex>
           <v-flex xs9>
@@ -87,7 +103,7 @@ export default {
       height: 100,
       color: {},
       x: 0,
-      y: 0,
+      z: 0,
       types: ['box', 'circle'],
     }
   },
@@ -104,7 +120,7 @@ export default {
       this.height = this.editItem.height
       this.color = this.editItem.color
       this.x = this.editItem.x
-      this.y = this.editItem.y
+      this.z = this.editItem.z
     },
     saveParts() {
       if (this.editItemKey) {
@@ -119,7 +135,7 @@ export default {
         .child('parts')
         .push({
           x: this.x,
-          y: this.y,
+          z: this.z,
           name: this.name,
           type: this.type,
           width: this.width,
@@ -141,7 +157,7 @@ export default {
       ref
         .set({
           x: this.x,
-          y: this.y,
+          z: this.z,
           name: this.name,
           type: this.type,
           width: this.width,

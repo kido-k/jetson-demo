@@ -93,7 +93,7 @@ export default {
   },
   data() {
     return {
-      partsItems: ['name', 'type', 'width', 'height', 'color', 'x', 'y'],
+      partsItems: ['name', 'type', 'width', 'height', 'color', 'x', 'z'],
       dialog: false,
       editItemKey: null,
       editItem: null,

@@ -50,7 +50,8 @@ export default {
       return {
         height: `${this.setting.width}px`,
         width: `${this.setting.width}px`,
-        transform: `translate(${this.setting.x}px, ${this.setting.y}px)`,
+        top: `${this.setting.z - this.setting.width / 2}px`,
+        left: `${this.setting.x - this.setting.width / 2}px`,
         border: `4px solid ${this.setting.color.hexa}`,
       }
     },
@@ -59,8 +60,8 @@ export default {
     dragmove(event) {
       if (!this.objectKey) return
       const _setting = Object.assign({}, this.setting)
-      _setting.x += Math.floor(event.dx)
-      _setting.y += Math.floor(event.dy)
+      _setting.x = Math.floor(event.clientX)
+      _setting.z = Math.floor(event.clientY)
 
       const ref = this.$firebase
         .database()
@@ -71,9 +72,8 @@ export default {
       if (!this.objectKey) return
       const _setting = Object.assign({}, this.setting)
       _setting.width = Math.floor(event.rect.width)
-      _setting.height = Math.floor(event.rect.height)
       _setting.x += Math.floor(event.deltaRect.left)
-      _setting.y += Math.floor(event.deltaRect.top)
+      _setting.z += Math.floor(event.deltaRect.top)
 
       const ref = this.$firebase
         .database()
@@ -90,6 +90,7 @@ export default {
 }
 
 .map-parts {
+  position: fixed;
   box-sizing: border-box;
   user-select: none;
   -ms-touch-action: none;
