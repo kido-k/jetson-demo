@@ -20,7 +20,7 @@ const perspectiveCameraSetting = {
   fov: 60,
   aspect: window.innerWidth / window.innerHeight,
   near: 500,
-  far: 2000,
+  far: 3000,
   position: { x: 1300, y: 500, z: 800 },
   lookAt: { x: 100, y: 0, z: 100 },
 }

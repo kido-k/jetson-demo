@@ -1,15 +1,15 @@
 <template>
   <section>
-    <preview-layout />
+    <three-layout />
   </section>
 </template>
 
 <script>
-import PreviewLayout from '~/components/preview/PreviewLayout.vue'
+import ThreeLayout from '~/components/gl/ThreeLayout.vue'
 
 export default {
   components: {
-    PreviewLayout,
+    ThreeLayout,
   },
 }
 </script>

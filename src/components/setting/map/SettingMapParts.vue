@@ -63,6 +63,7 @@ export default {
       _setting.x = Math.floor(event.clientX)
       _setting.z = Math.floor(event.clientY)
 
+      console.log(_setting)
       const ref = this.$firebase
         .database()
         .ref(`setting/parts/${this.objectKey}`)

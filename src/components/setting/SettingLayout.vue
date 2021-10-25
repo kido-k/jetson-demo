@@ -1,6 +1,5 @@
 <template>
   <v-layout class="setting-layout__wrap">
-    <nuxt-link to="/preview" class="mr-4">preview</nuxt-link>
     <template v-if="settings">
       <setting-map :settings="settings" />
       <setting-menu :settings="settings" />
