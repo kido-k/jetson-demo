@@ -22,7 +22,9 @@
                   >
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
-                  <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
+                  <v-btn icon @click.stop="deleteParts(key)">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
                   <v-btn icon @click.stop="copyParts(partsSettings[key])">
                     <v-icon>mdi-content-copy</v-icon>
                   </v-btn>
@@ -125,6 +127,9 @@ export default {
           this.closeDialog()
           throw error
         })
+    },
+    deleteParts(key) {
+      this.$firebase.database().ref('setting/parts').child(key).remove()
     },
   },
 }
