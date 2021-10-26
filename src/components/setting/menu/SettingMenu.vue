@@ -28,7 +28,6 @@ export default {
   },
   data() {
     return {
-      partsItems: ['name', 'type', 'width', 'height', 'color', 'x', 'y'],
       dialog: false,
       editItemKey: null,
       editItem: null,

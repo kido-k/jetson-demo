@@ -8,7 +8,9 @@
         v-if="settings.parts[key]"
         :key="index"
         :objectKey="key"
+        :selectItemKey="selectItemKey"
         :setting="settings.parts[key]"
+        @selectItem="setSelectItemKey"
       />
     </template>
   </section>
@@ -28,14 +30,20 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      selectItemKey: null,
+    }
   },
   computed: {
     baseColor() {
       return this.settings.base.color?.hexa
     },
   },
-  methods: {},
+  methods: {
+    setSelectItemKey(itemKey) {
+      this.selectItemKey = itemKey
+    },
+  },
 }
 </script>
 

@@ -158,9 +158,9 @@ class Common {
 
   setBase(baseSettings) {
     const baseGeometry = new THREE.BoxGeometry(
-      baseSettings.width,
-      baseSettings.height,
-      baseSettings.width
+      baseSettings.size,
+      10,
+      baseSettings.size
     )
     const baseMaterial = new THREE.MeshLambertMaterial({
       color: baseSettings.color.hex,

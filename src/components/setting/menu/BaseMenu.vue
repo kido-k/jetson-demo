@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      baseItems: ['width', 'height', 'color'],
+      baseItems: ['size', 'color'],
       dialog: false,
     }
   },

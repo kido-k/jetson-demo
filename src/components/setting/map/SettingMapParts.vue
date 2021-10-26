@@ -1,13 +1,15 @@
 <template>
-  <interact
-    draggable
-    resizable
-    class="map-parts"
-    :dragOption="dragOption"
-    :resizeOption="resizeOption"
-    :style="style"
-    @dragmove="dragmove"
-    @resizemove="resizemove"
+  <vue-drag-resize
+    :isActive="objectKey === selectItemKey"
+    :w="setting.width"
+    :h="setting.depth"
+    :x="setting.x"
+    :y="setting.z"
+    :gridX="grid"
+    :gridY="grid"
+    @resizing="setPartsSetting"
+    @dragging="setPartsSetting"
+    @clck="select"
   >
     <div
       class="map-parts__contents"
@@ -15,12 +17,10 @@
     >
       {{ setting.name }}
     </div>
-  </interact>
+  </vue-drag-resize>
 </template>
 
 <script>
-import interact from 'interactjs'
-
 export default {
   props: {
     objectKey: {
@@ -31,55 +31,32 @@ export default {
       type: Object,
       default: () => ({}),
     },
-  },
-  data: () => ({
-    resizeOption: {
-      edges: { left: true, right: true, bottom: true, top: true },
-    },
-    dragOption: {
-      modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: 'parent',
-          endOnly: true,
-        }),
-      ],
-    },
-  }),
-  computed: {
-    style() {
-      return {
-        height: `${this.setting.width}px`,
-        width: `${this.setting.width}px`,
-        top: `${this.setting.z - this.setting.width / 2}px`,
-        left: `${this.setting.x - this.setting.width / 2}px`,
-        border: `4px solid ${this.setting.color.hexa}`,
-      }
+    selectItemKey: {
+      type: String,
+      default: '',
     },
   },
+  data() {
+    return {
+      grid: 20,
+    }
+  },
+  computed: {},
   methods: {
-    dragmove(event) {
+    setPartsSetting(event) {
       if (!this.objectKey) return
       const _setting = Object.assign({}, this.setting)
-      _setting.x = Math.floor(event.clientX)
-      _setting.z = Math.floor(event.clientY)
-
-      console.log(_setting)
+      _setting.x = Math.floor(event.left)
+      _setting.z = Math.floor(event.top)
+      _setting.width = Math.floor(event.width)
+      _setting.depth = Math.floor(event.height)
       const ref = this.$firebase
         .database()
         .ref(`setting/parts/${this.objectKey}`)
       ref.set(_setting)
     },
-    resizemove(event) {
-      if (!this.objectKey) return
-      const _setting = Object.assign({}, this.setting)
-      _setting.width = Math.floor(event.rect.width)
-      _setting.x += Math.floor(event.deltaRect.left)
-      _setting.z += Math.floor(event.deltaRect.top)
-
-      const ref = this.$firebase
-        .database()
-        .ref(`setting/parts/${this.objectKey}`)
-      ref.set(_setting)
+    select() {
+      this.$emit('selectItem', this.objectKey)
     },
   },
 }
