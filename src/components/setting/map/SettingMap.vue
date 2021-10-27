@@ -1,5 +1,6 @@
 <template>
   <section class="setting-map__wrap" :style="{ 'background-color': baseColor }">
+    <setting-map-camera v-show="showCamera" :setting="settings.camera" />
     <template
       v-for="(key, index) in Object.keys(settings.parts)"
       class="setting-map__contents"
@@ -17,10 +18,12 @@
 </template>
 
 <script>
+import SettingMapCamera from './SettingMapCamera.vue'
 import SettingMapParts from './SettingMapParts.vue'
 
 export default {
   components: {
+    SettingMapCamera,
     SettingMapParts,
   },
   props: {
@@ -37,6 +40,9 @@ export default {
   computed: {
     baseColor() {
       return this.settings.base.color?.hexa
+    },
+    showCamera() {
+      return this.$store.state.layout.showCamera
     },
   },
   methods: {

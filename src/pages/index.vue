@@ -9,16 +9,17 @@
     >
       <v-tabs-slider></v-tabs-slider>
       <v-tab href="#setting">
-        Setting
-        <v-icon>mdi-cog</v-icon>
+        Layout
+        <v-icon>mdi-map</v-icon>
       </v-tab>
       <v-tab href="#preview">
         Preview
-        <v-icon>mdi-file-find</v-icon>
+        <v-icon>mdi-printer-3d</v-icon>
       </v-tab>
     </v-tabs>
     <setting-layout v-if="tab === 'setting'" />
     <preview-layout v-else />
+    <!-- <v-btn><v-icon>mdi-cog</v-icon></v-btn> -->
   </section>
 </template>
 

@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      grid: 20,
+      grid: 100,
     }
   },
   computed: {},

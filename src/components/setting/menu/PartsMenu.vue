@@ -103,7 +103,7 @@ export default {
         'height',
         'color',
         'x',
-        'y',
+        'z',
       ],
       dialog: false,
       editItemKey: null,

@@ -7,10 +7,10 @@
             <v-expansion-panel-header class="justify-between">
               <p class="ma-0">camera</p>
               <v-layout>
-                <v-btn v-if="showArea" icon @click.stop="showArea = false">
+                <v-btn v-show="showCamera" icon @click.stop="switchCamera">
                   <v-icon>mdi-eye</v-icon>
                 </v-btn>
-                <v-btn v-else icon @click.stop="showArea = true">
+                <v-btn v-show="!showCamera" icon @click.stop="switchCamera">
                   <v-icon>mdi-eye-off</v-icon>
                 </v-btn>
               </v-layout>
@@ -55,13 +55,20 @@ export default {
       showArea: false,
     }
   },
-  computed: {},
+  computed: {
+    showCamera() {
+      return this.$store.state.layout.showCamera
+    },
+  },
   methods: {
     openEditDialog() {
       this.dialog = true
     },
     closeDialog() {
       this.dialog = false
+    },
+    switchCamera() {
+      this.$store.commit('layout/switchCamera')
     },
   },
 }

@@ -1,22 +1,18 @@
 <template>
   <vue-drag-resize
-    :isActive="objectKey === selectItemKey"
+    :isActive="true"
     :w="setting.width"
     :h="setting.height"
     :x="setting.left"
     :y="setting.top"
     :gridX="grid"
     :gridY="grid"
+    class="map-camera"
     @resizing="setPartsSetting"
     @dragging="setPartsSetting"
     @clck="select"
   >
-    <div
-      class="map-parts__contents"
-      :style="{ 'background-color': setting.color.hexa }"
-    >
-      {{ setting.name }}
-    </div>
+    <div class="map-camera__contents">camera range</div>
   </vue-drag-resize>
 </template>
 
@@ -30,7 +26,7 @@ export default {
   },
   data() {
     return {
-      grid: 20,
+      grid: 50,
     }
   },
   computed: {},
@@ -53,19 +49,15 @@ export default {
   height: 100%;
 }
 
-.map-parts {
-  position: fixed;
-  box-sizing: border-box;
-  user-select: none;
-  -ms-touch-action: none;
-  touch-action: none;
+.map-camera {
+  border: 4px solid rgb(255, 0, 0, 0.8);
   border-radius: 8px;
   &__contents {
     height: 100%;
     width: 100%;
     border-radius: 4px;
     padding: 4px;
-    opacity: 0.6;
+    background-color: rgb(255, 0, 0, 0.1);
   }
 }
 </style>
