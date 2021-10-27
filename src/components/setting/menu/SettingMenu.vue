@@ -1,9 +1,9 @@
 <template>
   <section>
     <v-card class="setting-menu__wrap">
-      <v-list-item> Oparation </v-list-item>
-      <v-divider></v-divider>
       <base-menu :baseSetting="settings.base" />
+      <v-divider></v-divider>
+      <camera-menu :cameraSetting="settings.camera" />
       <v-divider></v-divider>
       <parts-menu :partsSettings="settings.parts" />
       <v-divider></v-divider>
@@ -13,11 +13,13 @@
 
 <script>
 import BaseMenu from './BaseMenu.vue'
+import CameraMenu from './CameraMenu.vue'
 import PartsMenu from './PartsMenu.vue'
 
 export default {
   components: {
     BaseMenu,
+    CameraMenu,
     PartsMenu,
   },
   props: {
