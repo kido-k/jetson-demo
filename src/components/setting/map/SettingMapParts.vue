@@ -9,7 +9,7 @@
     :gridY="grid"
     @resizing="setPartsSetting"
     @dragging="setPartsSetting"
-    @clck="select"
+    @click.native="selectParts"
   >
     <div
       class="map-parts__contents"
@@ -55,7 +55,7 @@ export default {
         .ref(`setting/parts/${this.objectKey}`)
       ref.set(_setting)
     },
-    select() {
+    selectParts() {
       this.$emit('selectItem', this.objectKey)
     },
   },

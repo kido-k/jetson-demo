@@ -10,7 +10,6 @@
     class="map-camera"
     @resizing="setPartsSetting"
     @dragging="setPartsSetting"
-    @clck="select"
   >
     <div class="map-camera__contents">camera range</div>
   </vue-drag-resize>

@@ -1,5 +1,5 @@
 export const state = () => ({
-  showCamera: true,
+  showCamera: false,
 })
 
 export const getters = {
