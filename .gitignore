@@ -92,6 +92,9 @@ sw.*
 
 # Firebase
 .firebase*
-firebase*
+firebase.json
+
+# github
+.github
 
 src/assets/sample
