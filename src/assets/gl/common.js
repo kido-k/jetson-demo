@@ -20,12 +20,14 @@ const perspectiveCameraSetting = {
   fov: 60,
   aspect: window.innerWidth / window.innerHeight,
   near: 500,
-  far: 2000,
+  far: 3000,
   position: { x: 1300, y: 500, z: 800 },
   lookAt: { x: 100, y: 0, z: 100 },
 }
 
 const lightSetting = { position: { x: 300, y: 300, z: 200 } }
+
+let _settings = null
 
 class Common {
   constructor() {
@@ -56,6 +58,7 @@ class Common {
   }
 
   init({ $canvas, settings, character }) {
+    _settings = settings
     this.setSize()
     // EventBus.$on('setCoordinate', this.setCoordinate.bind(this))
     EventBus.$on('stop', this.stop.bind(this))
@@ -117,10 +120,10 @@ class Common {
     this.renderer.setSize(this.size.width, this.size.height)
 
     // 土台のパーツをセット
-    this.setBase(settings.base)
+    this.setBase(_settings.base)
 
     // カスタムパーツをセット
-    this.setParts(settings.parts)
+    this.setParts(_settings.parts)
 
     // キャラクターを追加
     const names = this.setCharacter(character)
@@ -158,9 +161,9 @@ class Common {
 
   setBase(baseSettings) {
     const baseGeometry = new THREE.BoxGeometry(
-      baseSettings.width,
-      baseSettings.height,
-      baseSettings.width
+      baseSettings.size,
+      10,
+      baseSettings.size
     )
     const baseMaterial = new THREE.MeshLambertMaterial({
       color: baseSettings.color.hex,
@@ -171,29 +174,50 @@ class Common {
   }
 
   setParts(partsSettings) {
-    Object.keys(partsSettings).forEach((key) => {
+    Object.keys(partsSettings).forEach((key, index) => {
       const setting = partsSettings[key]
       const baseGeometry = new THREE.BoxGeometry(
         setting.width,
         setting.height,
         setting.width
       )
-      const baseMaterial = new THREE.MeshLambertMaterial({
-        color: setting.color.hex,
-      })
-      const box = new THREE.Mesh(baseGeometry, baseMaterial)
-      box.position.set(setting.x, setting.height / 2, setting.z)
-      this.scene.add(box)
+      if (!index) {
+        const loader = new THREE.TextureLoader()
+        loader.load(
+          'https://threejsfundamentals.org/threejs/resources/images/wall.jpg',
+          (texture) => {
+            const baseMaterial = new THREE.MeshLambertMaterial({
+              map: texture,
+            })
+            const box = new THREE.Mesh(baseGeometry, baseMaterial)
+            box.position.set(setting.x, setting.height / 2, setting.z)
+            this.scene.add(box)
+          }
+        )
+      } else {
+        const baseMaterial = new THREE.MeshLambertMaterial({
+          color: setting.color.hex,
+        })
+        const box = new THREE.Mesh(baseGeometry, baseMaterial)
+        box.position.set(setting.x, setting.height / 2, setting.z)
+        this.scene.add(box)
+      }
     })
   }
 
   setCharacter(character) {
     this.character = character
     const names = []
+
+    const minX = _settings.camera.left
+    const maxX = _settings.camera.left + _settings.camera.width
+    const minZ = _settings.camera.top - _settings.camera.height
+    const maxZ = _settings.camera.top
+
     ;[...Array(character.number)].map((_, i) => {
-      const x = randomIntMinMax(character.minX, character.maxX)
+      const x = randomIntMinMax(minX, maxX)
       const y = 10
-      const z = randomIntMinMax(character.minZ, character.maxZ)
+      const z = randomIntMinMax(minZ, maxZ)
       const position = { x, y, z }
       this.addCharacter(position, `person-${i}`)
       names.push(`person-${i}`)
@@ -251,15 +275,19 @@ class Common {
     if (this.mixer) {
       this.mixer.update(this.clock.getDelta())
     }
+    const minX = _settings.camera.left
+    const maxX = _settings.camera.left + _settings.camera.width
+    const minZ = _settings.camera.top - _settings.camera.height
+    const maxZ = _settings.camera.top
     this.diffs.forEach((diff) => {
       const model = this.scene.getObjectByName(diff.name)
       let x = model.position.x + diff.diff.x
-      if (x > this.character.maxX) x = this.character.maxX
-      if (x < this.character.minX) x = this.character.minX
+      if (x > maxX) x = maxX
+      if (x < minX) x = minX
       const y = model.position.y
       let z = model.position.z + diff.diff.z
-      if (z > this.character.maxZ) z = this.character.maxZ
-      if (z < this.character.minZ) z = this.character.minZ
+      if (z > maxZ) z = maxZ
+      if (z < minZ) z = minZ
       model.position.set(x, y, z)
       model.rotation.y = this.rotation
     })

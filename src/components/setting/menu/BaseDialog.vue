@@ -7,23 +7,15 @@
       <v-container>
         <v-layout align-center justify-center class="pa-4">
           <v-flex xs3>
-            <p class="ma-0">width:</p>
+            <p class="ma-0">size:</p>
           </v-flex>
           <v-flex xs9>
             <v-text-field
-              v-model="width"
+              v-model="size"
               width="250"
               hide-details="auto"
               type="number"
             />
-          </v-flex>
-        </v-layout>
-        <v-layout align-center justify-center class="pa-4">
-          <v-flex xs3>
-            <p class="ma-0 mr-4">height:</p>
-          </v-flex>
-          <v-flex xs9>
-            <v-text-field v-model="height" hide-details="auto" type="number" />
           </v-flex>
         </v-layout>
         <v-layout align-center justify-center class="pa-4">
@@ -61,8 +53,7 @@ export default {
   },
   data() {
     return {
-      width: 10000,
-      height: 10,
+      size: 10000,
       baseColor: {},
     }
   },
@@ -73,8 +64,7 @@ export default {
   },
   methods: {
     setEditItem() {
-      this.width = this.setting.width
-      this.height = this.setting.height
+      this.size = this.setting.size
       this.baseColor = this.setting.color
     },
     saveParts() {
@@ -82,7 +72,6 @@ export default {
       ref
         .set({
           width: this.width,
-          height: this.height,
           color: this.baseColor,
         })
         .then((doc) => {

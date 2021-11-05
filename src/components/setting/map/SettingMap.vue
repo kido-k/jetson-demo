@@ -1,5 +1,6 @@
 <template>
   <section class="setting-map__wrap" :style="{ 'background-color': baseColor }">
+    <setting-map-camera v-show="showCamera" :setting="settings.camera" />
     <template
       v-for="(key, index) in Object.keys(settings.parts)"
       class="setting-map__contents"
@@ -8,17 +9,21 @@
         v-if="settings.parts[key]"
         :key="index"
         :objectKey="key"
+        :selectItemKey="selectItemKey"
         :setting="settings.parts[key]"
+        @selectItem="setSelectItemKey"
       />
     </template>
   </section>
 </template>
 
 <script>
+import SettingMapCamera from './SettingMapCamera.vue'
 import SettingMapParts from './SettingMapParts.vue'
 
 export default {
   components: {
+    SettingMapCamera,
     SettingMapParts,
   },
   props: {
@@ -28,21 +33,30 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      selectItemKey: null,
+    }
   },
   computed: {
     baseColor() {
       return this.settings.base.color?.hexa
     },
+    showCamera() {
+      return this.$store.state.layout.showCamera
+    },
   },
-  methods: {},
+  methods: {
+    setSelectItemKey(itemKey) {
+      this.selectItemKey = itemKey
+    },
+  },
 }
 </script>
 
 <style scoped lang="scss">
 .setting-map {
   &__wrap {
-    width: 100%;
+    width: calc(100% - 300px);
     height: 100%;
   }
   &__contents {

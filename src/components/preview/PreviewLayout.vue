@@ -1,7 +1,6 @@
 <template>
   <section class="web-gl">
     <v-layout justify-end align-center>
-      <nuxt-link to="/setting" class="mr-4">setting</nuxt-link>
       <!-- <v-btn @click="test">test</v-btn> -->
       <v-btn @click="stop">stop</v-btn>
     </v-layout>
