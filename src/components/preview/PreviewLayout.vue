@@ -1,7 +1,7 @@
 <template>
   <section class="web-gl">
     <v-layout justify-end align-center>
-      <!-- <v-btn @click="test">test</v-btn> -->
+      <v-btn @click="test">test</v-btn>
       <v-btn @click="stop">stop</v-btn>
     </v-layout>
     <canvas ref="canvas" class="web-gl__canvas"></canvas>
@@ -17,190 +17,37 @@ export default {
     return {
       count: 0,
       settings: null,
+      results: null,
       interval: null,
-      positions: [
-        [
-          { x: 0, y: 10, z: 300 },
-          { x: 0, y: 10, z: 350 },
-          { x: 0, y: 10, z: 400 },
-          { x: 0, y: 10, z: 450 },
-          { x: 0, y: 10, z: 500 },
-          { x: 0, y: 10, z: 550 },
-        ],
-        [
-          { x: 50, y: 10, z: 300 },
-          { x: 50, y: 10, z: 350 },
-          { x: 50, y: 10, z: 400 },
-          { x: 50, y: 10, z: 450 },
-          { x: 50, y: 10, z: 500 },
-          { x: 50, y: 10, z: 550 },
-        ],
-        [
-          { x: 100, y: 10, z: 300 },
-          { x: 100, y: 10, z: 350 },
-          { x: 100, y: 10, z: 400 },
-          { x: 100, y: 10, z: 450 },
-          { x: 100, y: 10, z: 500 },
-          { x: 100, y: 10, z: 550 },
-        ],
-        [
-          { x: 150, y: 10, z: 300 },
-          { x: 150, y: 10, z: 350 },
-          { x: 150, y: 10, z: 400 },
-          { x: 150, y: 10, z: 450 },
-          { x: 150, y: 10, z: 500 },
-          { x: 150, y: 10, z: 550 },
-        ],
-        [
-          { x: 200, y: 10, z: 300 },
-          { x: 200, y: 10, z: 350 },
-          { x: 200, y: 10, z: 400 },
-          { x: 200, y: 10, z: 450 },
-          { x: 200, y: 10, z: 500 },
-          { x: 200, y: 10, z: 550 },
-        ],
-        [
-          { x: 250, y: 10, z: 300 },
-          { x: 250, y: 10, z: 350 },
-          { x: 250, y: 10, z: 400 },
-          { x: 250, y: 10, z: 450 },
-          { x: 250, y: 10, z: 500 },
-          { x: 250, y: 10, z: 550 },
-        ],
-        [
-          { x: 300, y: 10, z: 100 },
-          { x: 300, y: 10, z: 150 },
-          { x: 300, y: 10, z: 200 },
-          { x: 300, y: 10, z: 250 },
-          { x: 300, y: 10, z: 300 },
-          { x: 300, y: 10, z: 350 },
-        ],
-        [
-          { x: 350, y: 10, z: 100 },
-          { x: 350, y: 10, z: 150 },
-          { x: 350, y: 10, z: 200 },
-          { x: 350, y: 10, z: 250 },
-          { x: 350, y: 10, z: 300 },
-          { x: 350, y: 10, z: 350 },
-        ],
-        [
-          { x: 400, y: 10, z: 100 },
-          { x: 400, y: 10, z: 150 },
-          { x: 400, y: 10, z: 200 },
-          { x: 400, y: 10, z: 250 },
-          { x: 400, y: 10, z: 300 },
-          { x: 400, y: 10, z: 350 },
-        ],
-        [
-          { x: 450, y: 10, z: 100 },
-          { x: 450, y: 10, z: 150 },
-          { x: 450, y: 10, z: 200 },
-          { x: 450, y: 10, z: 250 },
-          { x: 450, y: 10, z: 300 },
-          { x: 450, y: 10, z: 350 },
-        ],
-        [
-          { x: 500, y: 10, z: 100 },
-          { x: 500, y: 10, z: 150 },
-          { x: 500, y: 10, z: 200 },
-          { x: 500, y: 10, z: 250 },
-          { x: 500, y: 10, z: 300 },
-          { x: 500, y: 10, z: 350 },
-        ],
-        [
-          { x: 550, y: 10, z: 100 },
-          { x: 550, y: 10, z: 150 },
-          { x: 550, y: 10, z: 200 },
-          { x: 550, y: 10, z: 250 },
-          { x: 550, y: 10, z: 300 },
-          { x: 550, y: 10, z: 350 },
-        ],
-        [
-          { x: 600, y: 10, z: 100 },
-          { x: 600, y: 10, z: 150 },
-          { x: 600, y: 10, z: 200 },
-          { x: 600, y: 10, z: 250 },
-          { x: 600, y: 10, z: 300 },
-          { x: 600, y: 10, z: 350 },
-        ],
-        [
-          { x: 650, y: 10, z: 100 },
-          { x: 650, y: 10, z: 150 },
-          { x: 650, y: 10, z: 200 },
-          { x: 650, y: 10, z: 250 },
-          { x: 650, y: 10, z: 300 },
-          { x: 650, y: 10, z: 350 },
-        ],
-        [
-          { x: 700, y: 10, z: 100 },
-          { x: 700, y: 10, z: 150 },
-          { x: 700, y: 10, z: 200 },
-          { x: 700, y: 10, z: 250 },
-          { x: 700, y: 10, z: 300 },
-          { x: 700, y: 10, z: 350 },
-        ],
-        [
-          { x: 750, y: 10, z: 100 },
-          { x: 750, y: 10, z: 150 },
-          { x: 750, y: 10, z: 200 },
-          { x: 750, y: 10, z: 250 },
-          { x: 750, y: 10, z: 300 },
-          { x: 750, y: 10, z: 350 },
-        ],
-        [
-          { x: 800, y: 10, z: 100 },
-          { x: 800, y: 10, z: 150 },
-          { x: 800, y: 10, z: 200 },
-          { x: 800, y: 10, z: 250 },
-          { x: 800, y: 10, z: 300 },
-          { x: 800, y: 10, z: 350 },
-        ],
-        [
-          { x: 850, y: 10, z: 100 },
-          { x: 850, y: 10, z: 150 },
-          { x: 850, y: 10, z: 200 },
-          { x: 850, y: 10, z: 250 },
-          { x: 850, y: 10, z: 300 },
-          { x: 850, y: 10, z: 350 },
-        ],
-        [
-          { x: 900, y: 10, z: 100 },
-          { x: 900, y: 10, z: 150 },
-          { x: 900, y: 10, z: 200 },
-          { x: 900, y: 10, z: 250 },
-          { x: 900, y: 10, z: 300 },
-          { x: 900, y: 10, z: 350 },
-        ],
-        [
-          { x: 950, y: 10, z: 100 },
-          { x: 950, y: 10, z: 150 },
-          { x: 950, y: 10, z: 200 },
-          { x: 950, y: 10, z: 250 },
-          { x: 950, y: 10, z: 300 },
-          { x: 950, y: 10, z: 350 },
-        ],
-        [
-          { x: 1000, y: 10, z: 100 },
-          { x: 1000, y: 10, z: 150 },
-          { x: 1000, y: 10, z: 200 },
-          { x: 1000, y: 10, z: 250 },
-          { x: 1000, y: 10, z: 300 },
-          { x: 1000, y: 10, z: 350 },
-        ],
-        [],
-      ],
+      delayTime: 5,
     }
   },
   mounted() {
     this.setSettings()
+    this.setResult()
   },
   methods: {
     setSettings() {
       const ref = this.$firebase.database().ref('setting')
-      ref.on('value', (snapshot) => {
+      ref.get().then((snapshot) => {
         if (!snapshot?.val()) return
         this.settings = snapshot.val()
         this.setWebGl()
+      })
+    },
+    setResult() {
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = ('0' + String(today.getMonth() + 1)).slice(-2)
+      // こっちが正しい
+      // const day = ('0' + String(today.getDate())).slice(-2)
+      // テスト用
+      const day = '06'
+      const date = `${year}-${month}-${day}`
+      const ref = this.$firebase.database().ref(`results/${date}`)
+      ref.on('value', (snapshot) => {
+        if (!snapshot?.val()) return
+        this.results = snapshot.val()
       })
     },
     setWebGl() {
@@ -209,34 +56,35 @@ export default {
           $canvas: this.$refs.canvas,
           settings: this.settings,
           character: {
-            number: 30,
-            minX: 100,
-            maxX: 1300,
-            minZ: 250,
-            maxZ: 450,
-            maxV: 50,
-            minV: -50,
+            number: 0,
           },
         })
       }
     },
-    // test() {
-    //   eventBus.$emit('setCoordinate', this.positions[this.count])
-    //   this.interval = setInterval(() => {
-    //     if (this.positions[this.count]) {
-    //       eventBus.$emit('setCoordinate', this.positions[this.count])
-    //       this.count += 1
-    //     } else {
-    //       clearInterval(this.interval)
-    //     }
-    //   }, 1000)
-    // },
+    test() {
+      let count = 0
+      this.interval = setInterval(() => {
+        // こっちがただしい
+        // const today = new Date()
+        // today.setSeconds(today.getSeconds() - this.delayTime);
+        // const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+
+        // テスト用
+        const time = `19:32:${30 + count}`
+        const result = this.results[time]
+        this.count = result.data.length
+        eventBus.$emit('setCoordinate', result.data)
+        count++
+      }, 1000)
+    },
     stop() {
       eventBus.$emit('stop')
+      clearInterval(this.interval)
     },
   },
 }
 </script>
+
 <style>
 .web-gl {
   width: 100%;

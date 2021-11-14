@@ -7,11 +7,24 @@
       <v-container>
         <v-layout align-center justify-center class="pa-4">
           <v-flex xs3>
-            <p class="ma-0">size:</p>
+            <p class="ma-0">width:</p>
           </v-flex>
           <v-flex xs9>
             <v-text-field
-              v-model="size"
+              v-model="width"
+              width="250"
+              hide-details="auto"
+              type="number"
+            />
+          </v-flex>
+        </v-layout>
+        <v-layout align-center justify-center class="pa-4">
+          <v-flex xs3>
+            <p class="ma-0">height:</p>
+          </v-flex>
+          <v-flex xs9>
+            <v-text-field
+              v-model="height"
               width="250"
               hide-details="auto"
               type="number"
@@ -33,6 +46,7 @@
             />
           </v-flex>
         </v-layout>
+        <v-file-input show-size label="File input" @change="uploadImage" />
       </v-container>
     </v-card-text>
     <v-card-actions>
@@ -53,7 +67,10 @@ export default {
   },
   data() {
     return {
-      size: 10000,
+      width: 16000,
+      height: 9000,
+      inputFile: null,
+      image: null,
       baseColor: {},
     }
   },
@@ -64,17 +81,55 @@ export default {
   },
   methods: {
     setEditItem() {
-      this.size = this.setting.size
+      this.width = this.setting.width
+      this.height = this.setting.height
       this.baseColor = this.setting.color
+      this.image = this.setting.image
+    },
+    uploadImage(file) {
+      if (file) {
+        const storageRef = this.$firebase
+          .storage()
+          .ref(`setting/base/image/${file.name}`)
+        storageRef.put(file).then(() => {
+          this.$firebase
+            .storage()
+            .ref(`setting/base/image/${file.name}`)
+            .getDownloadURL()
+            .then((url) => {
+              this.image = file
+              this.image.url = url
+              this.saveParts()
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+        })
+      } else {
+        const deleteRef = this.$firebase
+          .storage()
+          .ref(`setting/base/image/${this.image.name}`)
+        deleteRef
+          .delete()
+          .then(() => {
+            this.image = null
+            this.saveParts()
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     saveParts() {
       const ref = this.$firebase.database().ref(`setting/base/`)
       ref
         .set({
           width: this.width,
+          height: this.height,
           color: this.baseColor,
+          image: this.image,
         })
-        .then((doc) => {
+        .then(() => {
           this.closeDialog()
         })
         .catch((error) => {

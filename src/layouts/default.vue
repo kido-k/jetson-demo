@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <nuxt />
+    <nuxt class="application" />
   </v-app>
 </template>
 
@@ -11,3 +11,9 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="scss">
+.application {
+  max-width: unset;
+}
+</style>

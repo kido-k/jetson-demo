@@ -1,5 +1,13 @@
 <template>
-  <section class="setting-map__wrap" :style="{ 'background-color': baseColor }">
+  <div
+    class="setting-map__wrap"
+    :style="{
+      'background-color': baseColor,
+      'background-image': `url(${backgroundImage})`,
+      height: String(settings.base.height) + 'px',
+      width: String(settings.base.width) + 'px',
+    }"
+  >
     <setting-map-camera v-show="showCamera" :setting="settings.camera" />
     <template
       v-for="(key, index) in Object.keys(settings.parts)"
@@ -14,7 +22,7 @@
         @selectItem="setSelectItemKey"
       />
     </template>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -44,6 +52,9 @@ export default {
     showCamera() {
       return this.$store.state.layout.showCamera
     },
+    backgroundImage() {
+      return this.settings.base.image ? this.settings.base.image.url : ''
+    },
   },
   methods: {
     setSelectItemKey(itemKey) {
@@ -56,11 +67,7 @@ export default {
 <style scoped lang="scss">
 .setting-map {
   &__wrap {
-    width: calc(100% - 300px);
-    height: 100%;
-  }
-  &__contents {
-    width: 100%;
+    background-size: cover;
   }
 }
 </style>

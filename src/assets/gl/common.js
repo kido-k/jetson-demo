@@ -16,6 +16,11 @@ const fps = 60
 //   position: { x: 1000, y: 800, z: 800 },
 // }
 
+const webCamera = {
+  width: 800,
+  height: 600,
+}
+
 const perspectiveCameraSetting = {
   fov: 60,
   aspect: window.innerWidth / window.innerHeight,
@@ -53,14 +58,16 @@ class Common {
     }
 
     this.diffs = []
-    this.character = null
+    this.positions = []
     this.rotation = null
+    this.aspect = { width: null, height: null }
   }
 
-  init({ $canvas, settings, character }) {
+  init({ $canvas, settings }) {
     _settings = settings
     this.setSize()
-    // EventBus.$on('setCoordinate', this.setCoordinate.bind(this))
+    this.setAspect()
+    EventBus.$on('setCoordinate', this.setCoordinate.bind(this))
     EventBus.$on('stop', this.stop.bind(this))
 
     // シーンの設定
@@ -125,16 +132,6 @@ class Common {
     // カスタムパーツをセット
     this.setParts(_settings.parts)
 
-    // キャラクターを追加
-    const names = this.setCharacter(character)
-
-    // キャラクターを移動
-    this.interval = setInterval(() => {
-      names.forEach((name) => {
-        this.moveCharacter(name, character)
-      })
-    }, 1000)
-
     this.clock = new THREE.Clock()
     this.clock.start()
   }
@@ -143,6 +140,13 @@ class Common {
     this.size = {
       width: window.innerWidth,
       height: window.innerHeight,
+    }
+  }
+
+  setAspect() {
+    this.aspect = {
+      width: _settings.camera.width / webCamera.width,
+      height: _settings.camera.height / webCamera.height,
     }
   }
 
@@ -161,16 +165,30 @@ class Common {
 
   setBase(baseSettings) {
     const baseGeometry = new THREE.BoxGeometry(
-      baseSettings.size,
+      baseSettings.width,
       10,
-      baseSettings.size
+      baseSettings.height
     )
-    const baseMaterial = new THREE.MeshLambertMaterial({
-      color: baseSettings.color.hex,
-    })
-    const box = new THREE.Mesh(baseGeometry, baseMaterial)
-    box.position.set(0, -10, 0)
-    this.scene.add(box)
+    let baseMaterial = null
+
+    if (baseSettings.image) {
+      const loader = new THREE.TextureLoader()
+      loader.load(baseSettings.image.url, (texture) => {
+        baseMaterial = new THREE.MeshLambertMaterial({
+          map: texture,
+        })
+        const box = new THREE.Mesh(baseGeometry, baseMaterial)
+        box.position.set(baseSettings.width / 2, -10, baseSettings.height / 2)
+        this.scene.add(box)
+      })
+    } else {
+      baseMaterial = new THREE.MeshLambertMaterial({
+        color: baseSettings.color.hex,
+      })
+      const box = new THREE.Mesh(baseGeometry, baseMaterial)
+      box.position.set(baseSettings.width / 2, -10, baseSettings.height / 2)
+      this.scene.add(box)
+    }
   }
 
   setParts(partsSettings) {
@@ -179,9 +197,9 @@ class Common {
       const baseGeometry = new THREE.BoxGeometry(
         setting.width,
         setting.height,
-        setting.width
+        setting.depth
       )
-      if (!index) {
+      if (setting.image) {
         const loader = new THREE.TextureLoader()
         loader.load(
           'https://threejsfundamentals.org/threejs/resources/images/wall.jpg',
@@ -199,34 +217,17 @@ class Common {
           color: setting.color.hex,
         })
         const box = new THREE.Mesh(baseGeometry, baseMaterial)
-        box.position.set(setting.x, setting.height / 2, setting.z)
+        box.position.set(
+          setting.x + setting.width / 2,
+          setting.height / 2,
+          setting.z
+        )
         this.scene.add(box)
       }
     })
   }
 
-  setCharacter(character) {
-    this.character = character
-    const names = []
-
-    const minX = _settings.camera.left
-    const maxX = _settings.camera.left + _settings.camera.width
-    const minZ = _settings.camera.top - _settings.camera.height
-    const maxZ = _settings.camera.top
-
-    ;[...Array(character.number)].map((_, i) => {
-      const x = randomIntMinMax(minX, maxX)
-      const y = 10
-      const z = randomIntMinMax(minZ, maxZ)
-      const position = { x, y, z }
-      this.addCharacter(position, `person-${i}`)
-      names.push(`person-${i}`)
-      return position
-    })
-    return names
-  }
-
-  addCharacter(position, name) {
+  addCharacter(pos) {
     this.gltfLoader = new GLTFLoader()
     this.gltfLoader.load('/models/human.glb', (data) => {
       const gltf = data
@@ -238,56 +239,72 @@ class Common {
           this.mixer.clipAction(animation).play()
         })
       }
-      model.name = name
+      model.name = pos.track_id
       model.scale.set(0.7, 0.7, 0.7)
       model.rotation.y = Math.PI
-      model.position.set(position.x, position.y, position.z)
+      model.position.set(pos.coodX, 10, pos.coodZ)
       this.scene.add(model)
     })
   }
 
-  moveCharacter(name, character) {
-    const velocityX = randomIntMinMax(character.minV, character.maxV)
-    const velocityZ = randomIntMinMax(character.minV, character.maxV)
+  moveCharacter(pos, bfPos) {
+    const difX = bfPos.coodX - pos.coodX
+    const difZ = bfPos.coodZ - pos.coodZ
     const diff = {
-      x: velocityX / fps,
+      x: difX / fps,
       y: 0,
-      z: velocityZ / fps,
+      z: difZ / fps,
     }
-    this.diffs.push({ name, diff })
-    this.rotation = calcAngleDegrees(velocityX, velocityZ)
+    this.diffs.push({ name: pos.track_id, diff })
+    this.rotation = calcAngleDegrees(difX, difZ)
   }
 
-  // moveCharacter(position, name) {
-  //   const character = this.scene.getObjectByName(name)
-  //   const diffX = position.x - character.position.x
-  //   const diffZ = position.z - character.position.z
-  //   const diff = {
-  //     x: diffX / fps,
-  //     y: 0,
-  //     z: diffZ / fps,
-  //   }
-  //   this.diffs.push({ name, diff })
-  //   this.rotation = calcAngleDegrees(diffX, diffZ)
-  // }
+  removeCharacter(id) {
+    const selectedObject = this.scene.getObjectByName(id)
+    if (!selectedObject) return
+    if (selectedObject.geometry) this.selectedObject.geometry.dispose()
+    if (selectedObject.material) this.selectedObject.material.dispose()
+    this.scene.remove(selectedObject)
+  }
+
+  setCoordinate(newPositions) {
+    this.diffs = []
+
+    this.positions.forEach((pos) => {
+      if (!newPositions.some((newPos) => newPos.track_id === pos.track_id)) {
+        this.removeCharacter(pos.track_id)
+      }
+    })
+    newPositions.forEach((newPos) => {
+      newPos.coodX =
+        (parseInt(newPos.x) + parseInt(newPos.width) / 2) * this.aspect.width +
+        _settings.camera.left
+      newPos.coodZ =
+        (parseInt(newPos.y) - parseInt(newPos.height)) * this.aspect.height +
+        _settings.camera.top
+      const bfPos = this.positions.find(
+        (pos) => pos.track_id === newPos.track_id
+      )
+      if (bfPos) {
+        this.moveCharacter(newPos, bfPos)
+      } else {
+        this.addCharacter(newPos)
+      }
+    })
+    this.positions = newPositions
+  }
 
   update() {
     if (this.mixer) {
       this.mixer.update(this.clock.getDelta())
     }
-    const minX = _settings.camera.left
-    const maxX = _settings.camera.left + _settings.camera.width
-    const minZ = _settings.camera.top - _settings.camera.height
-    const maxZ = _settings.camera.top
+    console.log('update')
+    console.log(this.diffs)
     this.diffs.forEach((diff) => {
       const model = this.scene.getObjectByName(diff.name)
-      let x = model.position.x + diff.diff.x
-      if (x > maxX) x = maxX
-      if (x < minX) x = minX
+      const x = model.position.x + diff.diff.x
       const y = model.position.y
-      let z = model.position.z + diff.diff.z
-      if (z > maxZ) z = maxZ
-      if (z < minZ) z = minZ
+      const z = model.position.z + diff.diff.z
       model.position.set(x, y, z)
       model.rotation.y = this.rotation
     })
@@ -296,40 +313,10 @@ class Common {
   stop() {
     clearInterval(this.interval)
   }
-
-  // removeCharacter(name) {
-  //   this.scene.remove(name)
-  // }
-
-  // setCoordinate(positions) {
-  //   this.diffs = []
-  //   const children = this.scene.children
-  //   const childrenLength = children.length - 14
-
-  //   if (positions.length < childrenLength) {
-  //     const length = positions.length - childrenLength
-  //     for (let i = childrenLength; i > length; i -= 1) {
-  //       this.removeRobot(`person-${i}`)
-  //     }
-  //   }
-
-  //   positions.forEach((position, index) => {
-  //     if (index >= childrenLength) {
-  //       this.addCharacter(position, `person-${index}`)
-  //     } else {
-  //       this.moveCharacter(position, `person-${index}`)
-  //     }
-  //   })
-  // }
 }
 
 function calcAngleDegrees(x, y) {
   return Math.atan2(x, y) + Math.PI
-}
-
-function randomIntMinMax(min, max) {
-  const rand = Math.floor(Math.random() * (max + 1 - min)) + min
-  return rand
 }
 
 export default new Common()
