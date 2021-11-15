@@ -26,8 +26,8 @@ const perspectiveCameraSetting = {
   aspect: window.innerWidth / window.innerHeight,
   near: 500,
   far: 3000,
-  position: { x: 1300, y: 500, z: 800 },
-  lookAt: { x: 100, y: 0, z: 100 },
+  position: { x: 0, y: 1000, z: 400 },
+  lookAt: { x: 1, y: 0, z: 0 },
 }
 
 const lightSetting = { position: { x: 300, y: 300, z: 200 } }
@@ -208,7 +208,11 @@ class Common {
               map: texture,
             })
             const box = new THREE.Mesh(baseGeometry, baseMaterial)
-            box.position.set(setting.x, setting.height / 2, setting.z)
+            box.position.set(
+              setting.x + setting.width / 2,
+              setting.height / 2,
+              setting.z + setting.depth / 2
+            )
             this.scene.add(box)
           }
         )
@@ -220,7 +224,7 @@ class Common {
         box.position.set(
           setting.x + setting.width / 2,
           setting.height / 2,
-          setting.z
+          setting.z + setting.depth / 2 - 70
         )
         this.scene.add(box)
       }

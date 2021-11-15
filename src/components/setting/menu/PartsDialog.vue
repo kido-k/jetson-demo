@@ -44,6 +44,14 @@
         </v-layout>
         <v-layout align-center justify-center class="pa-4">
           <v-flex xs3>
+            <p class="ma-0 mr-4">depth:</p>
+          </v-flex>
+          <v-flex xs9>
+            <v-text-field v-model="depth" hide-details="auto" type="number" />
+          </v-flex>
+        </v-layout>
+        <v-layout align-center justify-center class="pa-4">
+          <v-flex xs3>
             <p class="ma-0 mr-4">x:</p>
           </v-flex>
           <v-flex xs9>
@@ -101,6 +109,7 @@ export default {
       name: null,
       width: 100,
       height: 100,
+      depth: 100,
       color: {},
       x: 0,
       z: 0,
@@ -118,6 +127,7 @@ export default {
       this.name = this.editItem.name
       this.width = this.editItem.width
       this.height = this.editItem.height
+      this.depth = this.editItem.depth
       this.color = this.editItem.color
       this.x = this.editItem.x
       this.z = this.editItem.z
@@ -140,9 +150,10 @@ export default {
           type: this.type,
           width: this.width,
           height: this.height,
+          depth: this.depth,
           color: this.color,
         })
-        .then((doc) => {
+        .then(() => {
           this.closeDialog()
         })
         .catch((error) => {
@@ -162,9 +173,10 @@ export default {
           type: this.type,
           width: this.width,
           height: this.height,
+          depth: this.depth,
           color: this.color,
         })
-        .then((doc) => {
+        .then(() => {
           this.closeDialog()
         })
         .catch((error) => {

@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.application {
+::v-deep .v-application--wrap {
   max-width: unset;
 }
 </style>
