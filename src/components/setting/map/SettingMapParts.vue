@@ -4,7 +4,7 @@
     :w="setting.width"
     :h="setting.depth"
     :x="setting.x"
-    :y="setting.z"
+    :y="setting.z + 60"
     :gridX="grid"
     :gridY="grid"
     @resizing="setPartsSetting"

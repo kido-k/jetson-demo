@@ -46,7 +46,12 @@
             />
           </v-flex>
         </v-layout>
-        <v-file-input show-size label="File input" @change="uploadImage" />
+        <v-file-input
+          v-model="inputFile"
+          show-size
+          label="File input"
+          @change="uploadImage"
+        />
       </v-container>
     </v-card-text>
     <v-card-actions>
@@ -85,6 +90,7 @@ export default {
       this.height = this.setting.height
       this.baseColor = this.setting.color
       this.image = this.setting.image
+      this.inputFile = this.image
     },
     uploadImage(file) {
       if (file) {
@@ -97,12 +103,15 @@ export default {
             .ref(`setting/base/image/${file.name}`)
             .getDownloadURL()
             .then((url) => {
-              this.image = file
-              this.image.url = url
-              this.saveParts()
+              this.image = {
+                url,
+                name: file.name,
+                type: file.type,
+                size: file.size,
+              }
             })
             .catch((error) => {
-              console.log(error)
+              throw error
             })
         })
       } else {
@@ -113,10 +122,10 @@ export default {
           .delete()
           .then(() => {
             this.image = null
-            this.saveParts()
+            this.inputFile = null
           })
           .catch((error) => {
-            console.log(error)
+            throw error
           })
       }
     },

@@ -1,7 +1,12 @@
 <template>
-  <v-layout class="setting-layout__wrap">
-    <template v-if="settings">
-      <setting-map :settings="settings" />
+  <section>
+    <v-layout class="setting-layout__wrap">
+      <div style="width: 100%">
+        <p class="pa-4 ma-0 project-name">
+          {{ projectName }}
+        </p>
+        <setting-map v-if="settings" :settings="settings" />
+      </div>
       <v-layout v-if="showMenu" class="setting-layout__menu">
         <v-btn text icon @click="showMenu = false">
           <v-icon>mdi-chevron-double-right</v-icon>
@@ -13,8 +18,8 @@
           <v-icon>mdi-chevron-double-left</v-icon>
         </v-btn>
       </template>
-    </template>
-  </v-layout>
+    </v-layout>
+  </section>
 </template>
 
 <script>
@@ -28,6 +33,7 @@ export default {
   },
   data() {
     return {
+      projectName: null,
       settings: null,
       showMenu: true,
     }
@@ -38,10 +44,13 @@ export default {
   },
   methods: {
     setSettings() {
-      const ref = this.$firebase.database().ref('setting')
+      const projectId = this.$route.params.projectId
+      const ref = this.$firebase.database().ref(`project/${projectId}`)
       ref.on('value', (snapshot) => {
         if (!snapshot?.val()) return
-        this.settings = snapshot.val()
+        const project = snapshot.val()
+        this.projectName = project.name
+        this.settings = project.setting
       })
     },
   },
@@ -49,14 +58,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.project-name {
+  font-size: 20px;
+  height: 60px;
+}
 .setting-layout {
   &__wrap {
     height: 100%;
-    background-color: #ececec;
+    width: 100%;
   }
   &__menu {
     position: fixed;
     right: 0;
+    height: calc(100% - 72px);
+    overflow: auto;
   }
 }
 </style>

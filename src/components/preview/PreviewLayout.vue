@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       count: 0,
+      projectName: null,
       settings: null,
       results: null,
       interval: null,
@@ -28,10 +29,13 @@ export default {
   },
   methods: {
     setSettings() {
-      const ref = this.$firebase.database().ref('setting')
-      ref.get().then((snapshot) => {
+      const projectId = this.$route.params.projectId
+      const ref = this.$firebase.database().ref(`project/${projectId}`)
+      ref.on('value', (snapshot) => {
         if (!snapshot?.val()) return
-        this.settings = snapshot.val()
+        const project = snapshot.val()
+        this.projectName = project.name
+        this.settings = project.setting
         this.setWebGl()
       })
     },

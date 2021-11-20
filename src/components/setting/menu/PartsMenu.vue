@@ -7,66 +7,29 @@
             add Parts
           </v-btn>
         </v-list-item>
-        <v-list-item>
-          <v-expansion-panels>
-            <v-expansion-panel
-              v-for="(key, index) in Object.keys(partsSettings)"
-              :key="index"
-            >
-              <v-expansion-panel-header class="justify-between">
-                <p class="ma-0">{{ partsSettings[key].name }}</p>
-                <v-layout>
-                  <v-btn
-                    icon
-                    @click.stop="openEditDialog(key, partsSettings[key])"
-                  >
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-btn>
-                  <v-btn icon @click.stop="deleteParts(key)">
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                  <v-btn icon @click.stop="copyParts(partsSettings[key])">
-                    <v-icon>mdi-content-copy</v-icon>
-                  </v-btn>
-                </v-layout>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content
-                v-for="partsItem in partsItems"
-                :key="partsItem"
-                class="pb-2"
-              >
-                <v-layout align-center justify-center>
-                  <v-flex xs4>
-                    <p class="mt-1 mb-0 mr-4 pt-3">{{ partsItem }}:</p>
-                  </v-flex>
-                  <v-flex xs8 d-flex class="align-center">
-                    <template v-if="partsItem === 'color'">
-                      <div
-                        class="color-pallet"
-                        :style="{
-                          'background-color':
-                            partsSettings[key][partsItem].hexa,
-                        }"
-                      />
-                      <v-text-field
-                        :value="partsSettings[key][partsItem].hexa"
-                        hide-details="auto"
-                        type="text"
-                        readonly
-                      />
-                    </template>
-                    <v-text-field
-                      v-else
-                      :value="partsSettings[key][partsItem]"
-                      hide-details="auto"
-                      type="text"
-                      readonly
-                    />
-                  </v-flex>
-                </v-layout>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+        <v-list-item
+          v-for="(key, index) in Object.keys(partsSettings)"
+          :key="index"
+        >
+          <v-card class="item__card">
+            <v-layout align-center justify-space-around>
+              <p class="ma-0">{{ partsSettings[key].name }}</p>
+              <div style="display: flex">
+                <v-btn
+                  icon
+                  @click.stop="openEditDialog(key, partsSettings[key])"
+                >
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon @click.stop="deleteParts(key)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+                <v-btn icon @click.stop="copyParts(partsSettings[key])">
+                  <v-icon>mdi-content-copy</v-icon>
+                </v-btn>
+              </div>
+            </v-layout>
+          </v-card>
         </v-list-item>
       </v-list>
     </v-card>
@@ -145,6 +108,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.item {
+  &__card {
+    padding: 16px;
+    width: 100%;
+  }
+}
+
 .color-pallet {
   width: 24px;
   height: 20px;

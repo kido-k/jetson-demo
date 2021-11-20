@@ -199,23 +199,43 @@ class Common {
         setting.height,
         setting.depth
       )
-      if (setting.image) {
-        const loader = new THREE.TextureLoader()
-        loader.load(
-          'https://threejsfundamentals.org/threejs/resources/images/wall.jpg',
-          (texture) => {
-            const baseMaterial = new THREE.MeshLambertMaterial({
-              map: texture,
-            })
-            const box = new THREE.Mesh(baseGeometry, baseMaterial)
-            box.position.set(
-              setting.x + setting.width / 2,
-              setting.height / 2,
-              setting.z + setting.depth / 2
-            )
-            this.scene.add(box)
-          }
-        )
+      if (setting.frontImage) {
+        const loadManager = new THREE.LoadingManager()
+        const loader = new THREE.TextureLoader(loadManager)
+
+        const front = setting.frontImage
+          ? { map: loader.load(setting.frontImage.url) }
+          : { color: setting.color.hex }
+        const back = setting.backImage
+          ? { map: loader.load(setting.backImage.url) }
+          : { color: setting.color.hex }
+        const right = setting.rightImage
+          ? { map: loader.load(setting.rightImage.url) }
+          : { color: setting.color.hex }
+        const left = setting.leftImage
+          ? { map: loader.load(setting.leftImage.url) }
+          : { color: setting.color.hex }
+        const top = setting.topImage
+          ? { map: loader.load(setting.topImage.url) }
+          : { color: setting.color.hex }
+        const bottom = { color: setting.color.hex }
+        const materials = [
+          new THREE.MeshBasicMaterial(right),
+          new THREE.MeshBasicMaterial(left),
+          new THREE.MeshBasicMaterial(top),
+          new THREE.MeshBasicMaterial(bottom),
+          new THREE.MeshBasicMaterial(front),
+          new THREE.MeshBasicMaterial(back),
+        ]
+        loadManager.onLoad = () => {
+          const box = new THREE.Mesh(baseGeometry, materials)
+          box.position.set(
+            setting.x + setting.width / 2,
+            setting.height / 2,
+            setting.z + setting.depth / 2
+          )
+          this.scene.add(box)
+        }
       } else {
         const baseMaterial = new THREE.MeshLambertMaterial({
           color: setting.color.hex,
@@ -302,8 +322,6 @@ class Common {
     if (this.mixer) {
       this.mixer.update(this.clock.getDelta())
     }
-    console.log('update')
-    console.log(this.diffs)
     this.diffs.forEach((diff) => {
       const model = this.scene.getObjectByName(diff.name)
       const x = model.position.x + diff.diff.x
