@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["jetson-demo.firebaseapp.com", "http://localhost:3000"],
+    "origin": ["https://jetson-demo.firebaseapp.com", "https://jetson-demo.web.app", "http://localhost:3000"],
     "responseHeader": ["*"],
     "method": ["GET"],
     "maxAgeSeconds": 86400
