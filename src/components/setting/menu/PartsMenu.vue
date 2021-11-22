@@ -1,7 +1,7 @@
 <template>
   <section>
     <v-card class="setting-menu__wrap" flat>
-      <v-list v-if="partsSettings" dense class="pb-8">
+      <v-list v-if="partsSettings" dense>
         <v-list-item class="justify-center">
           <v-btn color="primary" class="mt-4 mb-4" @click="dialog = true">
             add Parts

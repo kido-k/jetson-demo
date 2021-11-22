@@ -76,6 +76,7 @@ export default {
               height: '1000',
               width: '1000',
             },
+            character: 'human',
           },
         })
         .then(() => {

@@ -263,7 +263,18 @@ class Common {
 
   addCharacter(pos) {
     this.gltfLoader = new GLTFLoader()
-    this.gltfLoader.load('/models/human.glb', (data) => {
+    const modelSetting = {
+      path: '',
+      scale: 1,
+    }
+    if (_settings.character === 'human') {
+      modelSetting.path = '/models/human.glb'
+      modelSetting.scale = 0.7
+    } else if (_settings.character === 'robot') {
+      modelSetting.path = '/models/robot_animation.glb'
+      modelSetting.scale = 10
+    }
+    this.gltfLoader.load(modelSetting.path, (data) => {
       const gltf = data
       const model = gltf.scene
       const animations = gltf.animations
@@ -274,9 +285,17 @@ class Common {
         })
       }
       model.name = pos.track_id
-      model.scale.set(0.7, 0.7, 0.7)
+      model.scale.set(
+        modelSetting.scale,
+        modelSetting.scale,
+        modelSetting.scale
+      )
       model.rotation.y = Math.PI
-      model.position.set(pos.coodX, 10, pos.coodZ)
+      model.position.set(
+        pos.coodX - this.size.width / 2,
+        10,
+        pos.coodZ - this.size.height / 2
+      )
       this.scene.add(model)
     })
   }

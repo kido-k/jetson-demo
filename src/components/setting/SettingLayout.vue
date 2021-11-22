@@ -4,7 +4,7 @@
       <v-btn icon @click="backHome">
         <v-icon color="#fff">mdi-home</v-icon>
       </v-btn>
-      <p class="ma-0 project-top__name">
+      <p class="project-top__name">
         {{ projectName }}
       </p>
     </v-layout>
@@ -72,7 +72,7 @@ export default {
   left: 8px;
   &__name {
     padding: 8px 20px;
-    margin: 0 0 0 8px;
+    margin: 0 0 0 20px;
     border: 2px solid #fff;
     border-radius: 8px;
     font-size: 20px;

@@ -1,6 +1,15 @@
 <template>
   <section>
     <v-card class="setting-menu__wrap">
+      <v-select
+        v-model="character"
+        :items="characterItems"
+        label="character"
+        outlined
+        hide-details
+        class="setting-menu__selector"
+      />
+      <v-divider></v-divider>
       <base-menu :baseSetting="settings.base" />
       <v-divider></v-divider>
       <camera-menu :cameraSetting="settings.camera" />
@@ -33,9 +42,14 @@ export default {
       dialog: false,
       editItemKey: null,
       editItem: null,
+      characterItems: ['human', 'robot'],
+      character: null,
     }
   },
   computed: {},
+  mounted() {
+    this.character = this.settings.character || 'human'
+  },
   methods: {},
 }
 </script>
@@ -45,6 +59,9 @@ export default {
   &__wrap {
     width: 300px;
     height: 100%;
+  }
+  &__selector {
+    padding: 16px 24px;
   }
 }
 
