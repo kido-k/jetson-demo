@@ -3,7 +3,7 @@
     :isActive="objectKey === selectItemKey"
     :w="setting.width"
     :h="setting.depth"
-    :x="setting.x"
+    :x="setting.x + 60"
     :y="setting.z + 60"
     :gridX="grid"
     :gridY="grid"
@@ -44,15 +44,16 @@ export default {
   computed: {},
   methods: {
     setPartsSetting(event) {
+      const projectId = this.$route.params.projectId
       if (!this.objectKey) return
       const _setting = Object.assign({}, this.setting)
-      _setting.x = Math.floor(event.left)
-      _setting.z = Math.floor(event.top)
+      _setting.x = Math.floor(event.left) - 60
+      _setting.z = Math.floor(event.top) - 60
       _setting.width = Math.floor(event.width)
       _setting.depth = Math.floor(event.height)
       const ref = this.$firebase
         .database()
-        .ref(`setting/parts/${this.objectKey}`)
+        .ref(`project/${projectId}/setting/parts/${this.objectKey}`)
       ref.set(_setting)
     },
     selectParts() {

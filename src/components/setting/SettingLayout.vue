@@ -1,11 +1,16 @@
 <template>
   <section>
-    <v-layout class="setting-layout__wrap">
-      <div style="width: 100%">
-        <p class="pa-4 ma-0 project-name">
-          {{ projectName }}
-        </p>
-        <setting-map v-if="settings" :settings="settings" />
+    <v-layout class="project-top" align-center>
+      <v-btn icon @click="backHome">
+        <v-icon color="#fff">mdi-home</v-icon>
+      </v-btn>
+      <p class="ma-0 project-top__name">
+        {{ projectName }}
+      </p>
+    </v-layout>
+    <v-layout v-if="settings" class="setting-layout__wrap">
+      <div style="width: 100%; padding: 60px">
+        <setting-map :settings="settings" />
       </div>
       <v-layout v-if="showMenu" class="setting-layout__menu">
         <v-btn text icon @click="showMenu = false">
@@ -43,6 +48,9 @@ export default {
     this.setSettings()
   },
   methods: {
+    backHome() {
+      this.$router.push('/')
+    },
     setSettings() {
       const projectId = this.$route.params.projectId
       const ref = this.$firebase.database().ref(`project/${projectId}`)
@@ -58,9 +66,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.project-name {
-  font-size: 20px;
-  height: 60px;
+.project-top {
+  position: fixed;
+  top: 12px;
+  left: 8px;
+  &__name {
+    padding: 8px 20px;
+    margin: 0 0 0 8px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    font-size: 20px;
+    color: #fff;
+    font-weight: bold;
+  }
 }
 .setting-layout {
   &__wrap {
@@ -71,7 +89,7 @@ export default {
     position: fixed;
     right: 0;
     height: calc(100% - 72px);
-    overflow: auto;
+    overflow-y: scroll;
   }
 }
 </style>

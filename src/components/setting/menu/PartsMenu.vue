@@ -101,7 +101,12 @@ export default {
         })
     },
     deleteParts(key) {
-      this.$firebase.database().ref('setting/parts').child(key).remove()
+      const projectId = this.$route.params.projectId
+      this.$firebase
+        .database()
+        .ref(`project/${projectId}/setting/parts`)
+        .child(key)
+        .remove()
     },
   },
 }

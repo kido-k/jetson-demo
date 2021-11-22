@@ -67,7 +67,17 @@ export default {
     addNewProject() {
       const ref = this.$firebase.database().ref('project')
       ref
-        .push({ name: this.name })
+        .push({
+          name: this.name,
+          setting: {
+            base: {
+              color: { hexa: '#FFFFFFFF' },
+              image: {},
+              height: '1000',
+              width: '1000',
+            },
+          },
+        })
         .then(() => {
           this.dialog = false
           this.setProjects()
@@ -111,6 +121,10 @@ export default {
   &__card {
     padding: 10px 40px;
     min-width: 600px;
+    background-color: #6200ea !important;
+    border-color: #6200ea !important;
+    color: #fff;
+    font-weight: bold;
   }
 }
 </style>

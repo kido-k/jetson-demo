@@ -144,6 +144,7 @@ class Common {
   }
 
   setAspect() {
+    if (!_settings.camera) return
     this.aspect = {
       width: _settings.camera.width / webCamera.width,
       height: _settings.camera.height / webCamera.height,
@@ -178,7 +179,11 @@ class Common {
           map: texture,
         })
         const box = new THREE.Mesh(baseGeometry, baseMaterial)
-        box.position.set(baseSettings.width / 2, -10, baseSettings.height / 2)
+        box.position.set(
+          baseSettings.width / 2 - this.size.width / 2,
+          -10,
+          baseSettings.height / 2 - this.size.height / 2
+        )
         this.scene.add(box)
       })
     } else {
@@ -186,13 +191,18 @@ class Common {
         color: baseSettings.color.hex,
       })
       const box = new THREE.Mesh(baseGeometry, baseMaterial)
-      box.position.set(baseSettings.width / 2, -10, baseSettings.height / 2)
+      box.position.set(
+        baseSettings.width / 2 - this.size.width / 2,
+        -10,
+        baseSettings.height / 2 - -this.size.height / 2
+      )
       this.scene.add(box)
     }
   }
 
   setParts(partsSettings) {
-    Object.keys(partsSettings).forEach((key, index) => {
+    if (!partsSettings) return
+    Object.keys(partsSettings).forEach((key) => {
       const setting = partsSettings[key]
       const baseGeometry = new THREE.BoxGeometry(
         setting.width,
@@ -230,9 +240,9 @@ class Common {
         loadManager.onLoad = () => {
           const box = new THREE.Mesh(baseGeometry, materials)
           box.position.set(
-            setting.x + setting.width / 2,
+            setting.x + setting.width / 2 - this.size.width / 2,
             setting.height / 2,
-            setting.z + setting.depth / 2
+            setting.z + setting.depth / 2 - 70 - this.size.height / 2
           )
           this.scene.add(box)
         }
@@ -242,9 +252,9 @@ class Common {
         })
         const box = new THREE.Mesh(baseGeometry, baseMaterial)
         box.position.set(
-          setting.x + setting.width / 2,
+          setting.x + setting.width / 2 - this.size.width / 2,
           setting.height / 2,
-          setting.z + setting.depth / 2 - 70
+          setting.z + setting.depth / 2 - 70 - this.size.height / 2
         )
         this.scene.add(box)
       }
@@ -292,6 +302,7 @@ class Common {
   }
 
   setCoordinate(newPositions) {
+    if (!_settings.camera) return
     this.diffs = []
 
     this.positions.forEach((pos) => {

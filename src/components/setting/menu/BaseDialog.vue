@@ -93,14 +93,15 @@ export default {
       this.inputFile = this.image
     },
     uploadImage(file) {
+      const projectId = this.$route.params.projectId
       if (file) {
         const storageRef = this.$firebase
           .storage()
-          .ref(`setting/base/image/${file.name}`)
+          .ref(`project/${projectId}/setting/base/image/${file.name}`)
         storageRef.put(file).then(() => {
           this.$firebase
             .storage()
-            .ref(`setting/base/image/${file.name}`)
+            .ref(`project/${projectId}/setting/base/image/${file.name}`)
             .getDownloadURL()
             .then((url) => {
               this.image = {
@@ -117,7 +118,7 @@ export default {
       } else {
         const deleteRef = this.$firebase
           .storage()
-          .ref(`setting/base/image/${this.image.name}`)
+          .ref(`project/${projectId}/setting/base/image/${this.image.name}`)
         deleteRef
           .delete()
           .then(() => {
@@ -130,7 +131,10 @@ export default {
       }
     },
     saveParts() {
-      const ref = this.$firebase.database().ref(`setting/base/`)
+      const projectId = this.$route.params.projectId
+      const ref = this.$firebase
+        .database()
+        .ref(`project/${projectId}/setting/base/`)
       ref
         .set({
           width: this.width,

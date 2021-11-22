@@ -225,7 +225,8 @@ export default {
       }
     },
     addParts() {
-      const ref = this.$firebase.database().ref('setting')
+      const projectId = this.$route.params.projectId
+      const ref = this.$firebase.database().ref(`project/${projectId}/setting`)
       ref
         .child('parts')
         .push({
@@ -252,6 +253,7 @@ export default {
         })
     },
     editParts() {
+      const projectId = this.$route.params.projectId
       const editData = {
         x: this.x,
         z: this.z,
@@ -269,7 +271,7 @@ export default {
       if (this.topImage) editData.topImage = this.topImage
       const ref = this.$firebase
         .database()
-        .ref(`setting/parts/${this.editItemKey}`)
+        .ref(`project/${projectId}/setting/parts/${this.editItemKey}`)
       ref
         .set(editData)
         .then(() => {
@@ -281,8 +283,9 @@ export default {
         })
     },
     uploadImage(file, position) {
+      const projectId = this.$route.params.projectId
       if (file) {
-        const path = `setting/parts/${position}/image/${file.name}`
+        const path = `project/${projectId}/setting/parts/${position}/image/${file.name}`
         const storageRef = this.$firebase.storage().ref(path)
         storageRef.put(file).then(() => {
           this.$firebase
@@ -335,7 +338,7 @@ export default {
           this.topImage = null
           this.topImageFile = null
         }
-        const path = `setting/parts/${position}/image/${fileName}`
+        const path = `project/${projectId}/setting/parts/${position}/image/${fileName}`
         const deleteRef = this.$firebase.storage().ref(path)
         deleteRef
           .delete()

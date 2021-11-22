@@ -9,18 +9,20 @@
     }"
   >
     <setting-map-camera v-show="showCamera" :setting="settings.camera" />
-    <template
-      v-for="(key, index) in Object.keys(settings.parts)"
-      class="setting-map__contents"
-    >
-      <setting-map-parts
-        v-if="settings.parts[key]"
+    <template v-if="settings.parts">
+      <div
+        v-for="(key, index) in Object.keys(settings.parts)"
         :key="index"
-        :objectKey="key"
-        :selectItemKey="selectItemKey"
-        :setting="settings.parts[key]"
-        @selectItem="setSelectItemKey"
-      />
+        class="setting-map__contents"
+      >
+        <setting-map-parts
+          v-if="settings.parts[key]"
+          :objectKey="key"
+          :selectItemKey="selectItemKey"
+          :setting="settings.parts[key]"
+          @selectItem="setSelectItemKey"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -47,13 +49,13 @@ export default {
   },
   computed: {
     baseColor() {
-      return this.settings.base.color?.hexa
+      return this.settings.base?.color?.hexa || '#fff'
     },
     showCamera() {
       return this.$store.state.layout.showCamera
     },
     backgroundImage() {
-      return this.settings.base.image ? this.settings.base.image.url : ''
+      return this.settings.base?.image ? this.settings.base.image.url : ''
     },
   },
   methods: {

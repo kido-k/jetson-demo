@@ -31,12 +31,15 @@ export default {
   computed: {},
   methods: {
     setPartsSetting(event) {
+      const projectId = this.$route.params.projectId
       const _setting = Object.assign({}, this.setting)
       _setting.left = Math.floor(event.left)
       _setting.top = Math.floor(event.top)
       _setting.width = Math.floor(event.width)
       _setting.height = Math.floor(event.height)
-      const ref = this.$firebase.database().ref(`setting/camera`)
+      const ref = this.$firebase
+        .database()
+        .ref(`project/${projectId}/setting/camera`)
       ref.set(_setting)
     },
   },
