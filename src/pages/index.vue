@@ -124,7 +124,7 @@ export default {
     min-width: 600px;
     background-color: #6200ea !important;
     border-color: #6200ea !important;
-    color: #fff;
+    color: #fff !important;
     font-weight: bold;
   }
 }
