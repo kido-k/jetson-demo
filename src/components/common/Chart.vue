@@ -39,6 +39,9 @@ export default {
     this.setChartData()
     this.renderChart(this.chartData, this.options)
   },
+  destroyed() {
+    this.$data._chart.destroy()
+  },
   methods: {
     setChartData() {
       this.chartData.labels = this.labels

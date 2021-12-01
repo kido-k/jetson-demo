@@ -24,6 +24,11 @@ export default {
       results: null,
     }
   },
+  watch: {
+    count() {
+      this.update()
+    },
+  },
   mounted() {
     this.setWebGl()
   },
@@ -43,7 +48,7 @@ export default {
       }
     },
     update() {
-      eventBus.$emit('setCoordinate', this.count)
+      eventBus.$emit('setCharacter', this.count)
     },
   },
 }

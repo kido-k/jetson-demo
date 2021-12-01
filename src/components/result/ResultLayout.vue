@@ -13,6 +13,7 @@
         :count="count"
         :settings="settings"
       />
+      <result-three v-if="type === '3d'" :count="count" :settings="settings" />
     </template>
     <template v-else>
       <p class="result__title ma-4">Monitor</p>
@@ -32,6 +33,7 @@ import ResultButtonGroup from './ResultButtonGroup.vue'
 import ResultPersonNumber from './ResultPersonNumber.vue'
 import ResultChart from './ResultChart.vue'
 import ResultMapping from './ResultMapping.vue'
+import ResultThree from './ResultThree.vue'
 
 export default {
   components: {
@@ -39,6 +41,7 @@ export default {
     ResultPersonNumber,
     ResultChart,
     ResultMapping,
+    ResultThree,
   },
   props: {},
   data() {
@@ -94,7 +97,10 @@ export default {
       this.interval = setInterval(() => {
         const today = new Date()
         today.setSeconds(today.getSeconds() - this.delayTime)
-        const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+        const hours = ('0' + String(today.getHours())).slice(-2)
+        const minutes = ('0' + String(today.getMinutes())).slice(-2)
+        const seconds = ('0' + String(today.getSeconds())).slice(-2)
+        const time = `${hours}:${minutes}:${seconds}`
 
         const result = this.results[time]
         if (!result) return

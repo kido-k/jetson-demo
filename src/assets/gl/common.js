@@ -24,8 +24,8 @@ const webCamera = {
 const perspectiveCameraSetting = {
   fov: 60,
   aspect: window.innerWidth / window.innerHeight,
-  near: 500,
-  far: 3000,
+  near: 100,
+  far: 4000,
   position: { x: 0, y: 1000, z: 400 },
   lookAt: { x: 1, y: 0, z: 0 },
 }
@@ -64,11 +64,12 @@ class Common {
     this.aspect = { width: null, height: null }
   }
 
-  init({ $canvas, settings }) {
+  init({ $canvas, settings, count }) {
     _settings = settings
     this.setSize()
-    this.setAspect()
+    // this.setAspect()
     EventBus.$on('setCoordinate', this.setCoordinate.bind(this))
+    EventBus.$on('setCharacter', this.setCharacter.bind(this))
     EventBus.$on('stop', this.stop.bind(this))
 
     // シーンの設定
@@ -303,21 +304,21 @@ class Common {
 
   setCharacter(number) {
     const currentNumber = this.names.length
-    const diff = currentNumber - Number(number)
+    const diff = Number(number) - currentNumber
     if (!diff) return
     if (diff > 0) {
       ;[...Array(diff)].map((_, i) => {
-        const x = randomIntMinMax(
+        const coodX = randomIntMinMax(
           Number(_settings.camera.left),
           Number(_settings.camera.left) + Number(_settings.camera.width)
         )
-        const y = 10
-        const z = randomIntMinMax(
+        const coodY = 10
+        const coodZ = randomIntMinMax(
           Number(_settings.camera.top),
           Number(_settings.camera.top) + Number(_settings.camera.height)
         )
-        const position = { x, y, z }
-        this.addCharacter(position, `person-${i}`)
+        const position = { coodX, coodY, coodZ, track_id: `person-${i}` }
+        this.addCharacter(position)
         this.names.push(`person-${i}`)
         return position
       })
@@ -329,6 +330,9 @@ class Common {
         return name
       })
     }
+    this.names.forEach((name) => {
+      this.randomMoveCharacter(name)
+    })
   }
 
   moveCharacter(pos, bfPos) {
@@ -344,8 +348,8 @@ class Common {
   }
 
   randomMoveCharacter(name) {
-    const velocityX = randomIntMinMax(0, 5)
-    const velocityZ = randomIntMinMax(0, 5)
+    const velocityX = randomIntMinMax(-1, 1)
+    const velocityZ = randomIntMinMax(-1, 1)
     const diff = {
       x: velocityX / fps,
       y: 0,
@@ -397,6 +401,7 @@ class Common {
     }
     this.diffs.forEach((diff) => {
       const model = this.scene.getObjectByName(diff.name)
+      if (!model) return
       const x = model.position.x + diff.diff.x
       const y = model.position.y
       const z = model.position.z + diff.diff.z
