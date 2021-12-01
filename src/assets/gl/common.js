@@ -43,6 +43,7 @@ class Common {
     this.controls = null
     this.mixer = null
     this.gltfLoader = null
+    this.names = []
 
     this.size = {
       width: null,
@@ -300,6 +301,36 @@ class Common {
     })
   }
 
+  setCharacter(number) {
+    const currentNumber = this.names.length
+    const diff = currentNumber - Number(number)
+    if (!diff) return
+    if (diff > 0) {
+      ;[...Array(diff)].map((_, i) => {
+        const x = randomIntMinMax(
+          Number(_settings.camera.left),
+          Number(_settings.camera.left) + Number(_settings.camera.width)
+        )
+        const y = 10
+        const z = randomIntMinMax(
+          Number(_settings.camera.top),
+          Number(_settings.camera.top) + Number(_settings.camera.height)
+        )
+        const position = { x, y, z }
+        this.addCharacter(position, `person-${i}`)
+        this.names.push(`person-${i}`)
+        return position
+      })
+    } else {
+      ;[...Array(Math.abs(diff))].map((_, i) => {
+        const name = String(this.names[0])
+        this.removeCharacter(name)
+        this.names.shift()
+        return name
+      })
+    }
+  }
+
   moveCharacter(pos, bfPos) {
     const difX = bfPos.coodX - pos.coodX
     const difZ = bfPos.coodZ - pos.coodZ
@@ -310,6 +341,18 @@ class Common {
     }
     this.diffs.push({ name: pos.track_id, diff })
     this.rotation = calcAngleDegrees(difX, difZ)
+  }
+
+  randomMoveCharacter(name) {
+    const velocityX = randomIntMinMax(0, 5)
+    const velocityZ = randomIntMinMax(0, 5)
+    const diff = {
+      x: velocityX / fps,
+      y: 0,
+      z: velocityZ / fps,
+    }
+    this.diffs.push({ name, diff })
+    this.rotation = calcAngleDegrees(velocityX, velocityZ)
   }
 
   removeCharacter(id) {
@@ -369,6 +412,11 @@ class Common {
 
 function calcAngleDegrees(x, y) {
   return Math.atan2(x, y) + Math.PI
+}
+
+function randomIntMinMax(min, max) {
+  const rand = Math.floor(Math.random() * (max + 1 - min)) + min
+  return rand
 }
 
 export default new Common()

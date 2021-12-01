@@ -6,27 +6,31 @@
 
 <script>
 import WebGL from '~/assets/gl/webGL'
+import eventBus from '~/utils/event-bus'
 
 export default {
+  props: {
+    settings: {
+      type: Object,
+      default: () => ({}),
+    },
+    count: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
-      settings: null,
+      results: null,
     }
   },
   mounted() {
-    this.setSettings()
+    this.setWebGl()
+  },
+  destroyed() {
+    eventBus.$emit('stop')
   },
   methods: {
-    setSettings() {
-      const projectId = this.$route.params.projectId
-      const ref = this.$firebase.database().ref(`project/${projectId}`)
-      ref.on('value', (snapshot) => {
-        if (!snapshot?.val()) return
-        const project = snapshot.val()
-        this.settings = project.setting
-        this.setWebGl()
-      })
-    },
     setWebGl() {
       if (!this.webGL) {
         this.webGL = new WebGL({
@@ -37,6 +41,9 @@ export default {
           },
         })
       }
+    },
+    update() {
+      eventBus.$emit('setCoordinate', this.count)
     },
   },
 }

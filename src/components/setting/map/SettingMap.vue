@@ -41,6 +41,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    count: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {

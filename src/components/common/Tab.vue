@@ -15,6 +15,10 @@
       Preview
       <v-icon>mdi-printer-3d</v-icon>
     </v-tab>
+    <v-tab href="#monitor" @click="toOtherPage('monitor')">
+      Monitor
+      <v-icon>mdi-monitor</v-icon>
+    </v-tab>
   </v-tabs>
 </template>
 
@@ -26,10 +30,13 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.path.match(/setting/)) {
+    const path = this.$route.path
+    if (path.match(/setting/)) {
       this.tab = 'setting'
-    } else {
+    } else if (path.match(/preview/)) {
       this.tab = 'preview'
+    } else {
+      this.tab = 'monitor'
     }
   },
   methods: {
