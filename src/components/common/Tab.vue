@@ -11,10 +11,10 @@
       Layout
       <v-icon>mdi-map</v-icon>
     </v-tab>
-    <v-tab href="#preview" @click="toOtherPage('preview')">
+    <!-- <v-tab href="#preview" @click="toOtherPage('preview')">
       Preview
       <v-icon>mdi-printer-3d</v-icon>
-    </v-tab>
+    </v-tab> -->
     <v-tab href="#monitor" @click="toOtherPage('monitor')">
       Monitor
       <v-icon>mdi-monitor</v-icon>

@@ -4,6 +4,18 @@
       <v-btn
         fab
         depressed
+        :color="type === 'view' ? 'indigo' : 'gray'"
+        @click="changeType('view')"
+      >
+        <v-icon :color="type === 'view' ? 'white' : 'black'">
+          mdi-view-gallery-outline
+        </v-icon>
+      </v-btn>
+    </div>
+    <div>
+      <v-btn
+        fab
+        depressed
         :color="type === 'number' ? 'indigo' : 'gray'"
         @click="changeType('number')"
       >
@@ -36,7 +48,7 @@
         </v-icon>
       </v-btn>
     </div>
-    <div>
+    <!-- <div>
       <v-btn
         fab
         depressed
@@ -47,7 +59,7 @@
           mdi-video-3d
         </v-icon>
       </v-btn>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -56,7 +68,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'number',
+      default: 'view',
     },
   },
   data() {

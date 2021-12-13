@@ -1,7 +1,7 @@
 <template>
   <section>
     <tab />
-    <result-layout />
+    <result-layout class="result-layout" />
   </section>
 </template>
 
@@ -16,3 +16,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.result-layout {
+  width: 100%;
+}
+</style>

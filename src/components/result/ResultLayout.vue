@@ -2,6 +2,13 @@
   <div class="result">
     <template v-if="start">
       <result-button-group :type="type" @setType="setType" />
+      <result-view
+        v-if="type === 'view'"
+        :count="count"
+        :imageName="imageName"
+        :chartLabels="chartLabels"
+        :chartValues="chartValues"
+      />
       <result-person-number v-if="type === 'number'" :count="count" />
       <result-chart
         v-if="type === 'graph'"
@@ -30,6 +37,7 @@
 
 <script>
 import ResultButtonGroup from './ResultButtonGroup.vue'
+import ResultView from './ResultView.vue'
 import ResultPersonNumber from './ResultPersonNumber.vue'
 import ResultChart from './ResultChart.vue'
 import ResultMapping from './ResultMapping.vue'
@@ -38,6 +46,7 @@ import ResultThree from './ResultThree.vue'
 export default {
   components: {
     ResultButtonGroup,
+    ResultView,
     ResultPersonNumber,
     ResultChart,
     ResultMapping,
@@ -47,8 +56,9 @@ export default {
   data() {
     return {
       start: false,
-      type: 'number',
+      type: 'view',
       count: null,
+      imageName: null,
       projectName: null,
       settings: null,
       results: null,
@@ -94,6 +104,8 @@ export default {
     },
     test() {
       this.start = true
+      // this.chartLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      // this.chartValues = [10, 12, 13, 22, 30, 1, 5, 6, 2, 9]
       this.interval = setInterval(() => {
         const today = new Date()
         today.setSeconds(today.getSeconds() - this.delayTime)
@@ -102,6 +114,7 @@ export default {
         const seconds = ('0' + String(today.getSeconds())).slice(-2)
         const time = `${hours}:${minutes}:${seconds}`
 
+        this.imageName = `result-${hours}-${minutes}-${seconds}.jpg`
         const result = this.results[time]
         if (!result) return
         let count = 0
