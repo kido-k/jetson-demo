@@ -62,11 +62,28 @@ export default {
           display: false,
         },
         scales: {
-          yAxes: [
+          xAxes: [
+            // Ｘ軸設定
             {
+              scaleLabel: {
+                fontSize: 48,
+              },
               ticks: {
                 min: 0,
                 stepSize: 1,
+                fontSize: 48,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              scaleLabel: {
+                fontSize: 48,
+              },
+              ticks: {
+                min: 0,
+                stepSize: 1,
+                fontSize: 48,
               },
             },
           ],

@@ -65,8 +65,8 @@ export default {
     },
     test() {
       this.start = true
-      this.chartLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-      this.chartValues = [10, 12, 13, 22, 30, 1, 5, 6, 2, 9]
+      // this.chartLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      // this.chartValues = [10, 12, 13, 22, 30, 1, 5, 6, 2, 9]
       this.interval = setInterval(() => {
         const today = new Date()
         today.setSeconds(today.getSeconds() - this.delayTime)
