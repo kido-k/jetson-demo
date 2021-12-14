@@ -12,7 +12,7 @@
         :data="chartValues"
         :options="chartOptions"
         :colors="chartColors"
-        :styles="{ height: '50%', width: '95%' }"
+        :styles="{ height: '60%', width: '95%' }"
       />
     </v-layout>
   </div>
@@ -71,7 +71,7 @@ export default {
               ticks: {
                 min: 0,
                 stepSize: 1,
-                fontSize: 48,
+                fontSize: 32,
               },
             },
           ],
@@ -108,18 +108,18 @@ export default {
 <style lang="scss">
 .monitor-view {
   width: 100%;
+  height: 100vh;
   text-align: center;
-  margin: 16px;
   &__number {
-    font-size: 120px;
+    font-size: 180px;
     font-weight: bold;
-    font-family: serif;
     margin: 0 0 24px 0;
+    height: 30%;
     &__count {
       text-align: center;
     }
     &__unit {
-      font-size: 60px;
+      font-size: 80px;
       font-weight: bold;
       font-family: serif;
     }
