@@ -138,7 +138,7 @@ export default {
             )
           }
 
-          if (this.chartLabels.length > 2000) {
+          if (this.chartLabels.length > 1200) {
             this.filterHalfData()
           }
         })
