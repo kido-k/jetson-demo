@@ -36,13 +36,27 @@ export default {
       imageName: null,
       results: null,
       interval: null,
-      delayTime: 5,
+      delayTime: 2,
       chartLabels: [],
       chartValues: [],
+      startFiltering: false,
+      startTime: null,
     }
   },
   mounted() {
+    this.startTime = new Date()
     // this.setResult()
+    // this.startTime = new Date('2021-12-15 17:36:00')
+    // const num = 1990
+    // for (let i = 0; i < num; i++) {
+    //   if (!i) {
+    //     this.chartLabels.push(String('17:36:00'))
+    //   } else {
+    //     this.chartLabels.push(String('18:36:00'))
+    //   }
+    //   const value = Math.floor(Math.random() * num)
+    //   this.chartValues.push(value)
+    // }
   },
   destroyed() {
     this.stop()
@@ -101,20 +115,44 @@ export default {
           })
           this.count = count
 
-          const today = new Date()
-          today.setSeconds(today.getSeconds() - this.delayTime)
-          const hours = ('0' + String(today.getHours())).slice(-2)
-          const minutes = ('0' + String(today.getMinutes())).slice(-2)
-          const seconds = ('0' + String(today.getSeconds())).slice(-2)
+          if (this.startFiltering) return
+          const now = new Date()
+          now.setSeconds(now.getSeconds() - this.delayTime)
+          const hours = ('0' + String(now.getHours())).slice(-2)
+          const minutes = ('0' + String(now.getMinutes())).slice(-2)
+          const seconds = ('0' + String(now.getSeconds())).slice(-2)
           const time = `${hours}:${minutes}:${seconds}`
 
           this.chartLabels.push(time)
           this.chartValues.push(this.count)
 
-          if (this.chartLabels.length > 10800) this.chartLabels.shift()
-          if (this.chartValues.length > 10800) this.chartValues.shift()
+          let diff = now.getTime() - this.startTime.getTime()
+          if (diff) diff = Math.abs(diff) / (60 * 60 * 1000)
+          if (diff > 3) {
+            this.chartLabels.splice(0, 100)
+            this.chartValues.splice(0, 100)
+            this.startTime = new Date(
+              `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${
+                this.chartLabels[0]
+              }`
+            )
+          }
+
+          if (this.chartLabels.length > 2000) {
+            this.filterHalfData()
+          }
         })
       }, 1000)
+    },
+    filterHalfData() {
+      this.startFiltering = true
+      this.chartLabels = this.chartLabels.filter(
+        (label, index) => index % 2 === 0
+      )
+      this.chartValues = this.chartValues.filter(
+        (value, index) => index % 2 === 0
+      )
+      this.startFiltering = false
     },
     stop() {
       clearInterval(this.interval)
