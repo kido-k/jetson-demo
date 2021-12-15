@@ -86,8 +86,8 @@ export default {
         this.chartLabels.push(time)
         this.chartValues.push(this.count)
 
-        if (this.chartLabels.length > 50) this.chartLabels.shift()
-        if (this.chartValues.length > 50) this.chartValues.shift()
+        if (this.chartLabels.length > 10800) this.chartLabels.shift()
+        if (this.chartValues.length > 10800) this.chartValues.shift()
       }, 1000)
     },
     stop() {

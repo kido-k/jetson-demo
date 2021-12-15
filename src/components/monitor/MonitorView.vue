@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     setChartData() {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 10800; i++) {
         this.chartColors.push(this.chartBaseColor[0])
       }
     },
@@ -111,9 +111,9 @@ export default {
   height: 100vh;
   text-align: center;
   &__number {
-    font-size: 180px;
+    font-size: 280px;
     font-weight: bold;
-    margin: 0 0 24px 0;
+    margin: 0 0 92px 0 !important;
     height: 30%;
     &__count {
       text-align: center;
