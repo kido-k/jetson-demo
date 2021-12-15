@@ -1,7 +1,9 @@
 <template>
   <div class="monitor-view">
     <p class="monitor-view__number">
-      <span class="monitor-view__number__count">{{ count || '-' }}</span>
+      <span class="monitor-view__number__count">
+        {{ count !== null ? count : '-' }}
+      </span>
       <span class="monitor-view__number__unit">人</span>
     </p>
     <v-layout style="width: 100%">
