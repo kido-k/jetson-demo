@@ -10,7 +10,7 @@
     </template>
     <template v-else>
       <div class="start-button">
-        <v-btn icon @click="test">
+        <v-btn icon @click="updateLocal">
           <v-icon size="100" color="deep-purple">
             mdi-play-circle-outline
           </v-icon>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import MonitorView from './MonitorView.vue'
 
 export default {
@@ -41,53 +42,78 @@ export default {
     }
   },
   mounted() {
-    this.setResult()
+    // this.setResult()
   },
   destroyed() {
     this.stop()
   },
   methods: {
-    setResult() {
-      const today = new Date()
-      const year = today.getFullYear()
-      const month = ('0' + String(today.getMonth() + 1)).slice(-2)
-      const day = ('0' + String(today.getDate())).slice(-2)
+    // setResult() {
+    //   const today = new Date()
+    //   const year = today.getFullYear()
+    //   const month = ('0' + String(today.getMonth() + 1)).slice(-2)
+    //   const day = ('0' + String(today.getDate())).slice(-2)
 
-      const date = `${year}-${month}-${day}`
-      const ref = this.$firebase.database().ref(`results/${date}`)
-      ref.on('value', (snapshot) => {
-        if (!snapshot?.val()) return
-        this.results = snapshot.val()
-      })
-    },
-    setType(type) {
-      this.type = type
-    },
-    test() {
+    //   const date = `${year}-${month}-${day}`
+    //   const ref = this.$firebase.database().ref(`results/${date}`)
+    //   ref.on('value', (snapshot) => {
+    //     if (!snapshot?.val()) return
+    //     this.results = snapshot.val()
+    //   })
+    // },
+    // test() {
+    //   this.start = true
+    //   // this.chartLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    //   // this.chartValues = [10, 12, 13, 22, 30, 1, 5, 6, 2, 9]
+    //   this.interval = setInterval(() => {
+    //     const today = new Date()
+    //     today.setSeconds(today.getSeconds() - this.delayTime)
+    //     const hours = ('0' + String(today.getHours())).slice(-2)
+    //     const minutes = ('0' + String(today.getMinutes())).slice(-2)
+    //     const seconds = ('0' + String(today.getSeconds())).slice(-2)
+    //     const time = `${hours}:${minutes}:${seconds}`
+
+    //     this.imageName = `result-${hours}-${minutes}-${seconds}.jpg`
+    //     const result = this.results[time]
+    //     if (!result) return
+    //     let count = 0
+    //     result.data.forEach((data) => {
+    //       if (data[0] === 'person') count++
+    //     })
+    //     this.count = count
+    //     this.chartLabels.push(time)
+    //     this.chartValues.push(this.count)
+
+    //     if (this.chartLabels.length > 10800) this.chartLabels.shift()
+    //     if (this.chartValues.length > 10800) this.chartValues.shift()
+    //   }, 1000)
+    // },
+    updateLocal() {
       this.start = true
-      // this.chartLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-      // this.chartValues = [10, 12, 13, 22, 30, 1, 5, 6, 2, 9]
       this.interval = setInterval(() => {
-        const today = new Date()
-        today.setSeconds(today.getSeconds() - this.delayTime)
-        const hours = ('0' + String(today.getHours())).slice(-2)
-        const minutes = ('0' + String(today.getMinutes())).slice(-2)
-        const seconds = ('0' + String(today.getSeconds())).slice(-2)
-        const time = `${hours}:${minutes}:${seconds}`
+        axios.get('http://localhost:3500/').then((res) => {
+          if (!res) return
+          const result = res.data
+          if (!result) return
+          let count = 0
+          result.data.forEach((data) => {
+            if (data[0] === 'person') count++
+          })
+          this.count = count
 
-        this.imageName = `result-${hours}-${minutes}-${seconds}.jpg`
-        const result = this.results[time]
-        if (!result) return
-        let count = 0
-        result.data.forEach((data) => {
-          if (data[0] === 'person') count++
+          const today = new Date()
+          today.setSeconds(today.getSeconds() - this.delayTime)
+          const hours = ('0' + String(today.getHours())).slice(-2)
+          const minutes = ('0' + String(today.getMinutes())).slice(-2)
+          const seconds = ('0' + String(today.getSeconds())).slice(-2)
+          const time = `${hours}:${minutes}:${seconds}`
+
+          this.chartLabels.push(time)
+          this.chartValues.push(this.count)
+
+          if (this.chartLabels.length > 10800) this.chartLabels.shift()
+          if (this.chartValues.length > 10800) this.chartValues.shift()
         })
-        this.count = count
-        this.chartLabels.push(time)
-        this.chartValues.push(this.count)
-
-        if (this.chartLabels.length > 10800) this.chartLabels.shift()
-        if (this.chartValues.length > 10800) this.chartValues.shift()
       }, 1000)
     },
     stop() {
